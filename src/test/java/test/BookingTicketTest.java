@@ -1,58 +1,39 @@
 package test;
 
 import com.github.javafaker.Faker;
-import com.phptravels.RegistrationPage;
+import com.phptravels.BookingDetailsPage;
+import com.phptravels.DashboardPage;
+import com.phptravels.LoginPage;
 import com.phptravels.SignUpPage;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import testdata.UserData;
 import utils.WindowHandler;
 
 public class BookingTicketTest extends BaseTest {
     @Test
     public void bookingTicketAsGuestUserTest() {
-        RegistrationPage registration;
+        int adults = 2;
+        String destination = "Singapore";
+        String travellDate = "30-08-2021";
+        String country = "Bangladesh";
+        String nationality = "Bangladesh";
+        String address = "House# 35, Road# 1, Mirpur-11";
+        BookingDetailsPage bookingDetails;
+
         homePage.clickToursTab();
-        homePage.searchDestination("Singapore");            //  Singapore
-        homePage.setDate("30-08-2021");
-        homePage.clickTravellsOption();
-        homePage.setAdultsNumber("2");
-        homePage.clickSubmitBtn();
+        homePage.searchTravellTour(destination, travellDate, adults);
         homePage.clickDetailsLink();
-        registration = homePage.clickBookNowBtn();
+        bookingDetails = homePage.clickBookNowBtn();
 
-        registration.setFirstName(new Faker().name().firstName());
-        registration.setLastName(new Faker().name().lastName());
-        registration.setEmail(new Faker().internet().emailAddress());
-        registration.setPhoneNumber(new Faker().number().digits(10));
-        registration.setAddress("House# 35, Road# 1, Mirpur-11");
-//        registration.setCountryName("Bangladesh");
-//        registration.setNationalityName("Bangladesh");
-
-        registration.setTravellerTitle("MR");
-        registration.setTravellerFirstName(new Faker().name().firstName());
-        registration.setTravellerLastName(new Faker().name().firstName());
-
-        registration.setTraveller2Title("MR");
-        registration.setTraveller2FirstName(new Faker().name().firstName());
-        registration.setTraveller2LastName(new Faker().name().firstName());
-
-        registration.clickPayLater();
-        registration.clickAgreeBtn();
-        registration.clickBookingConfirm();
+        bookingDetails.fillBookingDetailsInfo(address, country, nationality);
+//        bookingDetails.fillTraveller_1_Info();
+//        bookingDetails.fillTraveller_2_Info();
+        bookingDetails.selectPaymentOptionAndAgree();
+        bookingDetails.clickBookingConfirm();
 
         WindowHandler handler = new WindowHandler(driver);
         handler.goBack();
-    }
-
-    @Test
-    public void signUpCustomer() {
-        SignUpPage signUp;
-        signUp = homePage.clickSignUpBtn();
-        signUp.setFirstName(new Faker().name().firstName());
-        signUp.setLastName(new Faker().name().lastName());
-        signUp.setEmail(new Faker().internet().emailAddress());
-        signUp.setPhoneNumber(new Faker().number().digits(10));
-        signUp.setPassword("pass123456");
-//        signUp.clickAccountType();
-        signUp.clickSignUpBtn();
+        System.out.println(driver.getTitle());
     }
 }

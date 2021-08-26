@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-public class BaseTest {
+public class BaseTest implements Test {
     HomePage homePage;
     EventFiringWebDriver driver;
 
@@ -137,6 +137,7 @@ public class BaseTest {
     public void navigateToHomePage(Method method) {
         driver.get(Helpers.getResourceString("BASE_URL"));
         homePage = new HomePage(driver);
+        homePage.cookieHandler();
     }
 
     /**
@@ -148,12 +149,12 @@ public class BaseTest {
     public void takeScreenShot(ITestResult result) {
         String screenShotName = getScreenshotName(result.getName());
 //        if (ITestResult.FAILURE == result.getStatus() && Helpers.getResourceBoolean("SCREENSHOT_ON_FAILURE")) {
-            File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            try {
-                FileUtils.copyFile(screenshotFile, new File(screenShotName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(screenshotFile, new File(screenShotName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        }
     }
 
