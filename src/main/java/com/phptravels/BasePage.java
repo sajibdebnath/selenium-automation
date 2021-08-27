@@ -1,9 +1,7 @@
 package com.phptravels;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
@@ -52,22 +50,44 @@ public class BasePage implements Page {
     /**
      * Waiting for element to be disappear
      *
-     * @param element
+     * @param locator
      * @param seconds
      */
-    @Override
-    public void waitForNotDisplayed(WebElement element, int seconds) {
-        wait.withTimeout(Duration.ofSeconds(seconds)).until(a -> !element.isDisplayed());
+    public void waitForDisappeared(By locator, int seconds) {
+        wait.withTimeout(Duration.ofSeconds(seconds)).until(a -> {
+            try {
+                driver.findElement(locator);
+                return false;
+            } catch (org.openqa.selenium.NoSuchElementException e) {
+                return true;
+            }
+        });
     }
 
     /**
      * Waiting for element to be disappear
      *
-     * @param element
+     * @param locator
      */
     @Override
-    public void waitForNotDisplayed(WebElement element) {
-        wait.until(a -> !element.isDisplayed());
+    public void waitForDisappeared(By locator) {
+        wait.until(a -> {
+            try {
+                driver.findElement(locator);
+                return false;
+            } catch (org.openqa.selenium.NoSuchElementException e) {
+                return true;
+            }
+        });
+    }
+
+
+    public boolean isElementPresent(By locator) {
+        try {
+            return driver.findElements(locator).size() > 0;
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
     }
 
     /**
@@ -116,11 +136,11 @@ public class BasePage implements Page {
      */
     @Override
     public void scrollToDown(int pixel, int count) {
-        sleepInMillis(500);
         for (int i = 0; i < count; i++) {
             executor.executeScript("window.scrollBy(0, " + pixel + ")");
             sleepInMillis(100);
         }
+        sleep(1);
     }
 
     /**
@@ -139,6 +159,24 @@ public class BasePage implements Page {
     public void scrollToTop() {
         sleepInMillis(500);
         executor.executeScript("window.scrollTo(0, 0)");
+    }
+
+    /**
+     * Go to next page using keyboard space
+     */
+    @Override
+    public void scrollToNextPage() {
+        Actions actions = new Actions(driver);
+        actions.sendKeys(Keys.chord(Keys.SPACE)).build().perform();
+    }
+
+    /**
+     * Go to next page using shift keyboard space
+     */
+    @Override
+    public void scrollToPreviousPage() {
+        Actions actions = new Actions(driver);
+        actions.sendKeys(Keys.chord(Keys.SHIFT, Keys.SPACE)).build().perform();
     }
 
     /**
@@ -164,7 +202,6 @@ public class BasePage implements Page {
         element.clear();
         element.sendKeys(text);
     }
-
 
     /**
      * Select text value from dropdown options
@@ -193,7 +230,7 @@ public class BasePage implements Page {
      *
      * @param element
      */
-    public void clickByJsExecutor(WebElement element) {
+    public void clickUsingJsExecutor(WebElement element) {
         sleepInMillis(500);
         executor.executeScript("arguments[0].click();", element);
     }

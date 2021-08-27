@@ -1,5 +1,6 @@
 package com.phptravels;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -10,9 +11,9 @@ public interface Page {
 
     void waitForDisplayed(WebElement element);
 
-    void waitForNotDisplayed(WebElement element, int seconds);
+    void waitForDisappeared(By locator, int seconds);
 
-    void waitForNotDisplayed(WebElement element);
+    void waitForDisappeared(By locator);
 
     void scrollTo(WebElement element);
 
@@ -23,7 +24,7 @@ public interface Page {
     void scrollToTop();
 
     void scrollToNextPage();
-    
+
     void scrollToPreviousPage();
 
     void setValue(WebElement element, int value);

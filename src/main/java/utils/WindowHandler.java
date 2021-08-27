@@ -29,6 +29,16 @@ public class WindowHandler {
         navigate.to(url);
     }
 
+    public void switchToTab() {
+        String parentWindow = driver.getWindowHandle();
+        Set<String> windows = driver.getWindowHandles();
+        for (String window : windows) {
+            if (!parentWindow.equalsIgnoreCase(window))
+                driver.switchTo().window(window);
+            break;
+        }
+    }
+
     public void switchToTab(String tabTitle) {
         Set<String> windows = driver.getWindowHandles();
         for (String window : windows) {

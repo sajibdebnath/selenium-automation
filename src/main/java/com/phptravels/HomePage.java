@@ -16,21 +16,10 @@ public class HomePage extends BasePage {
     WebElement gotItBtn;
     @FindBy(id = "tours-tab")
     WebElement tourTab;
-    @FindBy(xpath = "//*[@class='input-items']")
-    List<WebElement> searchByCity;
-
-
-//    @FindBy(xpath = "//input[@class='select2-search__field' and @type='search']")
-//    WebElement searchField;
-
+    @FindBy(xpath = "//select[@id='tours_city']/following-sibling::*")
+    WebElement searchByCity;
     @FindBy(xpath = "//input[@class='select2-search__field' and @type='search']")
     WebElement searchField;
-
-//    @FindBy(className = "select2-search__field")
-//    WebElement searchField;
-
-    @FindBy(xpath = "//*[contains(@class,'select2-results__option')]")
-    List<WebElement> searchResults;
     @FindBy(id = "date")
     WebElement date;
     @FindBy(partialLinkText = "Travellers")
@@ -38,7 +27,7 @@ public class HomePage extends BasePage {
     @FindBy(id = "tours_adults")
     WebElement adultsNumber;
     @FindBy(id = "submit")
-    List<WebElement> searchBtn;
+    List<WebElement> searchBtns;
     @FindBy(partialLinkText = "Details")
     List<WebElement> detailsLink;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
@@ -48,7 +37,8 @@ public class HomePage extends BasePage {
 //    List<WebElement> options;
 
     @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
-    List<WebElement> options;
+    List<WebElement> searchResults;
+    By searching = By.xpath("//li[@role='option' and text()='Searching…']");
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -64,11 +54,10 @@ public class HomePage extends BasePage {
     }
 
     public void searchDestination(String destination) {
-        waitForDisplayed(searchByCity.get(2));
-        searchByCity.get(2).click();
-        searchField.sendKeys(destination);
-        sleep(3);
-        searchResults.get(0).click();
+        waitForDisplayed(searchByCity);
+        searchByCity.click();
+        searchByText(destination);
+        clickSearchResults(destination);
     }
 
     public void setDate(String dd) {
@@ -84,8 +73,13 @@ public class HomePage extends BasePage {
         setValue(adultsNumber, number);
     }
 
-    public void clickSubmitBtn() {
-        searchBtn.get(1).click();
+    public void clickSearchBtn() {
+        for (WebElement element : searchBtns) {
+            if (element.isDisplayed()) {
+                element.click();
+                break;
+            }
+        }
     }
 
     public void searchTravelTour(String destination, String date, int adultNumber) {
@@ -93,14 +87,12 @@ public class HomePage extends BasePage {
         setDate(date);
         clickTravelsOption();
         setAdultsNumber(adultNumber);
-        clickSubmitBtn();
+        clickSearchBtn();
     }
 
     public void clickDetailsLink(String name) {
-        scrollToDown(100, 7);
-        WebElement tourName = driver.findElement(By.xpath("//li[@id='" + name + "']"));
-        waitForDisplayed(tourName);
-        tourName.findElement(By.linkText("Details")).click();
+        executor.executeScript("window.scrollBy(0, 100)");
+        detailsLink.get(0).click();
     }
 
     public SignUpPage clickSignUpLink() {
@@ -121,17 +113,15 @@ public class HomePage extends BasePage {
         return new BookingDetailsPage(driver);
     }
 
-    public void selectOptionBySearch(String text) {
+    public void searchByText(String text) {
         searchField.sendKeys(text);
-        selectOption(text);
+        waitForDisappeared(searching);
+        clickSearchResults(text);
     }
 
-    public void selectOption(String text) {
-        searchField.sendKeys(text);
-
-        for (WebElement option : options) {
-            if (option.getText().trim().equalsIgnoreCase(text)) {
-                sleepInMillis(200);
+    public void clickSearchResults(String text) {
+        for (WebElement option : searchResults) {
+            if (option.getText().toLowerCase().contains(text.toLowerCase())) {
                 option.click();
                 break;
             }

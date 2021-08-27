@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import utils.WindowHandler;
 
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class BookingDetailsPage extends HomePage {
     @FindBy(id = "lastname_2")
     WebElement traveller2LastName;
 
+//    @FindBy(xpath = "//*[@for='gateway_pay-later']")
+//    WebElement paylater;
+
     @FindBy(id = "gateway_pay-later")
     WebElement paylater;
 
@@ -80,12 +84,12 @@ public class BookingDetailsPage extends HomePage {
     public void setCountryName(String country) {
         scrollToDown(100, 2);
         dropdownOption.get(0).click();
-        selectOptionBySearch(country);
+        searchByText(country);
     }
 
     public void setNationalityName(String nationality) {
         dropdownOption.get(1).click();
-        selectOptionBySearch(nationality);
+        searchByText(nationality);
     }
 
     public void setTravellerTitle(String title) {
@@ -118,7 +122,7 @@ public class BookingDetailsPage extends HomePage {
     }
 
     public void clickPayLater() {
-        scrollToDown(100, 4);
+        scrollToDown(100, 10);
         paylater.click();
     }
 
@@ -150,13 +154,9 @@ public class BookingDetailsPage extends HomePage {
         setTraveller2LastName(new Faker().name().firstName());
     }
 
-//    public void selectPaymentOptionAndcheckAgreement() {
-//        scrollToDown(100, 7);
-//        clickPayLater();
-//        clickAgreeBtn();
-//    }
-
     public void clickBookingConfirm() {
-        clickByJsExecutor(bookingConfirmBtn);
+        scrollToDown(100, 3);
+        clickUsingJsExecutor(bookingConfirmBtn);
+        new WindowHandler(driver).switchToTab("Singapore Transfer: Hotel to Singapore Cruise Centre");
     }
 }

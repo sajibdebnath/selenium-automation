@@ -41,7 +41,7 @@ public class SignUpPage extends LoginPage {
     public void selectAccountType(String type) {
         scrollToDown(100, 2);
         typeOption.get(5).click();
-        selectOption(type);
+        clickSearchResults(type);
     }
 
     public void fillCustomerInfo(String firstName, String lastName, String phone, String email, String pass, String accType) {
