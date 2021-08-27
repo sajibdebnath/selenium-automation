@@ -102,9 +102,9 @@ public class BasePage implements Page {
      * @param element
      */
     @Override
-    public void scrollToElement(WebElement element) {
+    public void scrollTo(WebElement element) {
         sleepInMillis(500);
-        executor.executeScript("arguments[0].scrollIntoView();", element);
+        executor.executeScript("arguments[0].scrollIntoView(false);", element);
         sleepInMillis(500);
     }
 
@@ -186,5 +186,15 @@ public class BasePage implements Page {
     public void selectByValue(WebElement element, String text) {
         Select select = new Select(element);
         select.selectByValue(text);
+    }
+
+    /**
+     * Web element click by javascript executor
+     *
+     * @param element
+     */
+    public void clickByJsExecutor(WebElement element) {
+        sleepInMillis(500);
+        executor.executeScript("arguments[0].click();", element);
     }
 }

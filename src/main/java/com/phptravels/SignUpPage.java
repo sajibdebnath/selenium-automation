@@ -1,6 +1,5 @@
 package com.phptravels;
 
-import com.github.javafaker.Faker;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,13 +44,13 @@ public class SignUpPage extends LoginPage {
         selectOption(type);
     }
 
-    public void fillCustomerInfo(String email, String pass) {
-        setFirstName(new Faker().name().firstName());
-        setLastName(new Faker().name().lastName());
+    public void fillCustomerInfo(String firstName, String lastName, String phone, String email, String pass, String accType) {
+        setFirstName(firstName);
+        setLastName(lastName);
         setEmail(email);
-        setPhoneNumber(new Faker().number().digits(10));
+        setPhoneNumber(phone);
         setPassword(pass);
-        selectAccountType("Customer");
+        selectAccountType(accType);
     }
 
     public void clickSignUpBtn() {

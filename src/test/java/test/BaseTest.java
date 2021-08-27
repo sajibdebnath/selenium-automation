@@ -89,7 +89,7 @@ public class BaseTest implements Test {
      * @return
      */
     private ChromeOptions getChromeOptions() {
-        Map<String, Object> prefs = new HashMap<String, Object>();
+        Map<String, Object> prefs = new HashMap<>();
         prefs.put("credentials_enable_service", false);
         prefs.put("profile.password_manager_enabled", false);
 

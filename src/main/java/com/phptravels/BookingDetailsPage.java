@@ -1,10 +1,8 @@
 package com.phptravels;
 
 import com.github.javafaker.Faker;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -82,12 +80,12 @@ public class BookingDetailsPage extends HomePage {
     public void setCountryName(String country) {
         scrollToDown(100, 2);
         dropdownOption.get(0).click();
-        selectOption(country);
+        selectOptionBySearch(country);
     }
 
     public void setNationalityName(String nationality) {
         dropdownOption.get(1).click();
-        selectOption(nationality);
+        selectOptionBySearch(nationality);
     }
 
     public void setTravellerTitle(String title) {
@@ -129,11 +127,12 @@ public class BookingDetailsPage extends HomePage {
             agreeCheckMark.click();
     }
 
-    public void fillBookingDetailsInfo(String addrs, String country, String nationality) {
-        setFirstName(new Faker().name().firstName());
-        setLastName(new Faker().name().lastName());
-        setEmail(new Faker().internet().emailAddress());
-        setPhoneNumber(new Faker().number().digits(10));
+    public void fillCustomerDetailsInfo(String firstName, String lastName, String email,
+                                        String phone, String addrs, String country, String nationality) {
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPhoneNumber(phone);
         setAddress(addrs);
         setCountryName(country);
         setNationalityName(nationality);
@@ -151,14 +150,13 @@ public class BookingDetailsPage extends HomePage {
         setTraveller2LastName(new Faker().name().firstName());
     }
 
-    public void selectPaymentOptionAndAgree() {
-        scrollToDown(100, 7);
-        clickPayLater();
-        clickAgreeBtn();
-    }
+//    public void selectPaymentOptionAndcheckAgreement() {
+//        scrollToDown(100, 7);
+//        clickPayLater();
+//        clickAgreeBtn();
+//    }
 
     public void clickBookingConfirm() {
-        waitForDisplayed(bookingConfirmBtn);
-        bookingConfirmBtn.click();
+        clickByJsExecutor(bookingConfirmBtn);
     }
 }

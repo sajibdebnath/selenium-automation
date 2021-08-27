@@ -14,13 +14,17 @@ public interface Page {
 
     void waitForNotDisplayed(WebElement element);
 
-    void scrollToElement(WebElement element);
+    void scrollTo(WebElement element);
 
     void scrollToDown(int pixel, int count);
 
     void scrollToBottom();
 
     void scrollToTop();
+
+    void scrollToNextPage();
+    
+    void scrollToPreviousPage();
 
     void setValue(WebElement element, int value);
 
