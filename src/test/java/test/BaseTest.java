@@ -148,14 +148,14 @@ public class BaseTest implements Test {
     @AfterMethod
     public void takeScreenShot(ITestResult result) {
         String screenShotName = getScreenshotName(result.getName());
-//        if (ITestResult.FAILURE == result.getStatus() && Helpers.getBoolean("SCREENSHOT_ON_FAILURE")) {
-        File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        try {
-            FileUtils.copyFile(screenshotFile, new File(screenShotName));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (ITestResult.FAILURE == result.getStatus() && Helpers.getBoolean("SCREENSHOT_ON_FAILURE")) {
+            File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            try {
+                FileUtils.copyFile(screenshotFile, new File(screenShotName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-//        }
     }
 
     /**
