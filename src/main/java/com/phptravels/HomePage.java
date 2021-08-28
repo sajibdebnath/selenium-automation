@@ -9,36 +9,32 @@ import java.util.List;
 
 public class HomePage extends BasePage {
     @FindBy(partialLinkText = "Signup")
-    WebElement signUpLink;
+    private WebElement signUpLink;
     @FindBy(partialLinkText = "Login")
-    WebElement loginLink;
+    private WebElement loginLink;
     @FindBy(id = "cookie_stop")
-    WebElement gotItBtn;
+    private WebElement gotItBtn;
     @FindBy(id = "tours-tab")
-    WebElement tourTab;
+    private WebElement tourTab;
     @FindBy(xpath = "//select[@id='tours_city']/following-sibling::*")
-    WebElement searchByCity;
+    private WebElement searchByCity;
     @FindBy(xpath = "//input[@class='select2-search__field' and @type='search']")
-    WebElement searchField;
+    private WebElement searchField;
     @FindBy(id = "date")
-    WebElement date;
+    private WebElement date;
     @FindBy(partialLinkText = "Travellers")
-    WebElement travellerOption;
+    private WebElement travellerOption;
     @FindBy(id = "tours_adults")
-    WebElement adultsNumber;
+    private WebElement adultsNumber;
     @FindBy(id = "submit")
-    List<WebElement> searchBtns;
+    private List<WebElement> searchBtns;
     @FindBy(partialLinkText = "Details")
-    List<WebElement> detailsLink;
+    private List<WebElement> detailsLink;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
-    WebElement bookNowBtn;
-
-//    @FindBy(xpath = "//li[@role='option']")
-//    List<WebElement> options;
-
+    private WebElement bookNowBtn;
     @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
-    List<WebElement> searchResults;
-    By searching = By.xpath("//li[@role='option' and text()='Searching…']");
+    private List<WebElement> searchResults;
+    private By searching = By.xpath("//li[@role='option' and text()='Searching…']");
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -53,27 +49,24 @@ public class HomePage extends BasePage {
         tourTab.click();
     }
 
-    public void searchDestination(String destination) {
-        waitForDisplayed(searchByCity);
+    private void searchCity(String destination) {
         searchByCity.click();
         searchByText(destination);
         clickSearchResults(destination);
     }
 
-    public void setDate(String dd) {
+    private void setDate(String dd) {
+        date.click();
         date.sendKeys(dd);
     }
 
-    public void clickTravelsOption() {
+    private void setAdultsNumber(int number) {
         waitForDisplayed(travellerOption);
         travellerOption.click();
-    }
-
-    public void setAdultsNumber(int number) {
         setValue(adultsNumber, number);
     }
 
-    public void clickSearchBtn() {
+    private void clickSearchBtn() {
         for (WebElement element : searchBtns) {
             if (element.isDisplayed()) {
                 element.click();
@@ -83,15 +76,15 @@ public class HomePage extends BasePage {
     }
 
     public void searchTravelTour(String destination, String date, int adultNumber) {
-        searchDestination(destination);
+        searchCity(destination);
         setDate(date);
-        clickTravelsOption();
         setAdultsNumber(adultNumber);
         clickSearchBtn();
     }
 
     public void clickDetailsLink(String name) {
         executor.executeScript("window.scrollBy(0, 100)");
+        waitForDisplayed(detailsLink.get(0));
         detailsLink.get(0).click();
     }
 
@@ -113,15 +106,15 @@ public class HomePage extends BasePage {
         return new BookingDetailsPage(driver);
     }
 
-    public void searchByText(String text) {
+    void searchByText(String text) {
         searchField.sendKeys(text);
         waitForDisappeared(searching);
         clickSearchResults(text);
     }
 
-    public void clickSearchResults(String text) {
+    void clickSearchResults(String text) {
         for (WebElement option : searchResults) {
-            if (option.getText().toLowerCase().contains(text.toLowerCase())) {
+            if (option.getText().contains(text)) {
                 option.click();
                 break;
             }

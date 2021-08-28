@@ -9,7 +9,7 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import java.util.List;
 
 public class EventReporter implements WebDriverEventListener {
-    static By locator;
+    private static By locator;
 
     public void beforeAlertAccept(WebDriver webDriver) {
 

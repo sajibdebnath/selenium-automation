@@ -14,4 +14,7 @@ public class SignupData {
     public static final String NATIONALITY = "Bangladesh";
     public static final String ADDRESS = "House# 35, Road# 1, Mirpur-11";
 
+    public static final String TITLE_1 = "MRS";
+    public static final String TITLE_2 = "MISS";
+
 }

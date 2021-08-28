@@ -33,9 +33,9 @@ public class BaseTest implements Test {
 
     @BeforeClass
     public void startDriver() {
-        WebDriver webDriver = getWebDriver(Helpers.getResourceString("BROWSER"));
+        WebDriver webDriver = getWebDriver(Helpers.getString("BROWSER"));
         driver = getEventFiringWebDriver(webDriver);
-        driver.manage().timeouts().implicitlyWait(Helpers.getResourceInteger("IMPLICIT_WAIT"), TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Helpers.getInteger("IMPLICIT_WAIT"), TimeUnit.SECONDS);
         driver.manage().window().maximize();
     }
 
@@ -69,7 +69,7 @@ public class BaseTest implements Test {
      */
     private EventFiringWebDriver getEventFiringWebDriver(WebDriver webDriver) {
         driver = new EventFiringWebDriver(webDriver);
-        if (Helpers.getResourceBoolean("EVENT_LOG"))
+        if (Helpers.getBoolean("EVENT_LOG"))
             return driver.register(new EventReporter());
         return driver;
     }
@@ -98,7 +98,7 @@ public class BaseTest implements Test {
         options.addArguments("--disable-notifications");
         options.addArguments("--ignore-certificate-errors");
         options.addArguments("--unlimited-storage");
-        options.setHeadless(Helpers.getResourceBoolean("HEADLESS"));
+        options.setHeadless(Helpers.getBoolean("HEADLESS"));
         return options;
     }
 
@@ -118,7 +118,7 @@ public class BaseTest implements Test {
      */
     private FirefoxOptions getFirefoxOptions() {
         FirefoxOptions options = new FirefoxOptions();
-        options.setHeadless(Helpers.getResourceBoolean("HEADLESS"));
+        options.setHeadless(Helpers.getBoolean("HEADLESS"));
         return options;
     }
 
@@ -135,7 +135,7 @@ public class BaseTest implements Test {
      */
     @BeforeMethod
     public void navigateToHomePage(Method method) {
-        driver.get(Helpers.getResourceString("BASE_URL"));
+        driver.get(Helpers.getString("BASE_URL"));
         homePage = new HomePage(driver);
         homePage.cookieHandler();
     }
@@ -148,7 +148,7 @@ public class BaseTest implements Test {
     @AfterMethod
     public void takeScreenShot(ITestResult result) {
         String screenShotName = getScreenshotName(result.getName());
-//        if (ITestResult.FAILURE == result.getStatus() && Helpers.getResourceBoolean("SCREENSHOT_ON_FAILURE")) {
+//        if (ITestResult.FAILURE == result.getStatus() && Helpers.getBoolean("SCREENSHOT_ON_FAILURE")) {
         File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
             FileUtils.copyFile(screenshotFile, new File(screenShotName));

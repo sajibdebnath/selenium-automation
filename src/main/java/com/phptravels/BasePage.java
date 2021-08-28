@@ -226,12 +226,15 @@ public class BasePage implements Page {
     }
 
     /**
-     * Web element click by javascript executor
+     * First try to click element by selenium and if get an exception then use javascript executor
      *
      * @param element
      */
-    public void clickUsingJsExecutor(WebElement element) {
-        sleepInMillis(500);
-        executor.executeScript("arguments[0].click();", element);
+    public void customClick(WebElement element) {
+        try {
+            element.click();
+        } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+            executor.executeScript("arguments[0].click();", element);
+        }
     }
 }

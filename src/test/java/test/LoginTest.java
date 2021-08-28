@@ -8,15 +8,13 @@ import testdata.SiteData;
 import testdata.UserData;
 
 public class LoginTest extends BaseTest {
-    LoginPage login;
-    DashboardPage dashboard;
+    private LoginPage login;
+    private DashboardPage dashboard;
 
     @Test
     public void loginAndLogoutTest() {
         login = homePage.clickLoginLink();
-        login.fillUserCredential(
-                UserData.EMAIL,
-                UserData.PASSWORD);
+        login.fillUserCredential(UserData.EMAIL, UserData.PASSWORD);
         dashboard = login.clickLogInBtn();
 
         Assert.assertEquals(dashboard.getAuthorTitle(), UserData.USERNAME);

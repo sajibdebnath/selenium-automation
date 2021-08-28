@@ -6,21 +6,23 @@ import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends HomePage {
     @FindBy(name = "email")
-    WebElement email;
+    private WebElement email;
     @FindBy(name = "password")
-    WebElement password;
+    private WebElement password;
     @FindBy(xpath = "//span[text()='Login']")
-    WebElement loginBtn;
+    private WebElement loginBtn;
+    @FindBy(xpath = "//div[@class='alert alert-success signup']")
+    private WebElement alertSuccess;
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
-    public void setEmail(String email_addrs) {
+    void setEmail(String email_addrs) {
         setValue(email, email_addrs);
     }
 
-    public void setPassword(String pass) {
+    void setPassword(String pass) {
         setValue(password, pass);
     }
 
@@ -32,5 +34,9 @@ public class LoginPage extends HomePage {
     public DashboardPage clickLogInBtn() {
         loginBtn.click();
         return new DashboardPage(driver);
+    }
+
+    public String successAlertMessage() {
+        return alertSuccess.getText();
     }
 }

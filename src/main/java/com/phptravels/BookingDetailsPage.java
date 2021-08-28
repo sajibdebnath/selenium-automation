@@ -1,6 +1,6 @@
 package com.phptravels;
 
-import com.github.javafaker.Faker;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,129 +10,113 @@ import java.util.List;
 
 public class BookingDetailsPage extends HomePage {
     @FindBy(name = "firstname")
-    WebElement firstName;
-
+    private WebElement firstName;
     @FindBy(name = "lastname")
-    WebElement lastName;
-
+    private WebElement lastName;
     @FindBy(name = "email")
-    WebElement email;
-
+    private WebElement email;
     @FindBy(name = "phone")
-    WebElement phoneNumber;
-
+    private WebElement phoneNumber;
     @FindBy(name = "address")
-    WebElement address;
-
+    private WebElement address;
     @FindBy(xpath = "//div[@class='input-items w-auto']")
-    List<WebElement> dropdownOption;
-
+    private List<WebElement> dropdownOption;
     @FindBy(name = "title_1")
-    WebElement travellerTitle;
-
-    @FindBy(id = "firstname_1")
-    WebElement travellerFirstName;
-
-    @FindBy(id = "lastname_1")
-    WebElement travellerLastName;
-
-    @FindBy(id = "title_2")
-    WebElement traveller2Title;
-
-    @FindBy(id = "firstname_2")
-    WebElement traveller2FirstName;
-
-    @FindBy(id = "lastname_2")
-    WebElement traveller2LastName;
-
-//    @FindBy(xpath = "//*[@for='gateway_pay-later']")
-//    WebElement paylater;
-
+    private WebElement travellerTitle;
+    @FindBy(name = "firstname_1")
+    private WebElement travellerFirstName;
+    @FindBy(name = "lastname_1")
+    private WebElement travellerLastName;
+    @FindBy(name = "title_2")
+    private WebElement traveller2Title;
+    @FindBy(name = "firstname_2")
+    private WebElement traveller2FirstName;
+    @FindBy(name = "lastname_2")
+    private WebElement traveller2LastName;
     @FindBy(id = "gateway_pay-later")
-    WebElement paylater;
-
+    private WebElement paylater;
     @FindBy(id = "agreechb")
-    WebElement agreeCheckMark;
-
+    private WebElement agreeCheckMark;
     @FindBy(id = "booking")
-    WebElement bookingConfirmBtn;
+    private WebElement bookingConfirmBtn;
 
     public BookingDetailsPage(WebDriver driver) {
         super(driver);
     }
 
-    public void setFirstName(String fName) {
+    private void setFirstName(String fName) {
         setValue(firstName, fName);
     }
 
-    public void setLastName(String lName) {
+    private void setLastName(String lName) {
         setValue(lastName, lName);
     }
 
-    public void setEmail(String email_addrs) {
+    private void setEmail(String email_addrs) {
         setValue(email, email_addrs);
     }
 
-    public void setPhoneNumber(String number) {
+    private void setPhoneNumber(String number) {
         setValue(phoneNumber, number);
     }
 
-    public void setAddress(String address_name) {
+    private void setAddress(String address_name) {
         setValue(address, address_name);
     }
 
-    public void setCountryName(String country) {
+    private void setCountryName(String country) {
         scrollToDown(100, 2);
         dropdownOption.get(0).click();
         searchByText(country);
     }
 
-    public void setNationalityName(String nationality) {
+    private void setNationalityName(String nationality) {
         dropdownOption.get(1).click();
         searchByText(nationality);
     }
 
-    public void setTravellerTitle(String title) {
-        scrollToDown(100, 3);
+    private void setTravellerTitle(String title) {
+        scrollToDown(100, 5);
         travellerTitle.click();
-        selectByVisibleText(travellerTitle, title);
+        selectTitle(title);
     }
 
-    public void setTravellerFirstName(String tFirstName) {
+    private void setTravellerFirstName(String tFirstName) {
         setValue(travellerFirstName, tFirstName);
     }
 
-    public void setTravellerLastName(String tLastName) {
+    private void setTravellerLastName(String tLastName) {
         setValue(travellerLastName, tLastName);
     }
 
-
-    public void setTraveller2Title(String title) {
-        scrollToDown(100, 3);
+    private void setTraveller2Title(String title) {
+        scrollToDown(100, 4);
         traveller2Title.click();
-        selectByVisibleText(traveller2Title, title);
+        selectTitle(title);
     }
 
-    public void setTraveller2FirstName(String tFirstName) {
+    private void setTraveller2FirstName(String tFirstName) {
         setValue(traveller2FirstName, tFirstName);
     }
 
-    public void setTraveller2LastName(String tLastName) {
+    private void setTraveller2LastName(String tLastName) {
         setValue(traveller2LastName, tLastName);
     }
 
-    public void clickPayLater() {
-        scrollToDown(100, 10);
-        paylater.click();
+    private void selectTitle(String title) {
+        List<WebElement> titleElements = driver.findElements(By.xpath("//option[text()='" + title + "']"));
+        for (WebElement element : titleElements) {
+            if (element.isDisplayed()) {
+                element.click();
+                break;
+            }
+        }
     }
 
-    public void clickAgreeBtn() {
-        if (!agreeCheckMark.isSelected())
-            agreeCheckMark.click();
-    }
-
-    public void fillCustomerDetailsInfo(String firstName, String lastName, String email,
-                                        String phone, String addrs, String country, String nationality) {
+    public void fillCustomerDetailsInfo(
+            String firstName, String lastName,
+            String email, String phone, String addrs,
+            String country, String nationality) {
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
@@ -142,21 +126,30 @@ public class BookingDetailsPage extends HomePage {
         setNationalityName(nationality);
     }
 
-    public void fillTraveller_1_Info() {
-        setTravellerTitle("MR");
-        setTravellerFirstName(new Faker().name().firstName());
-        setTravellerLastName(new Faker().name().firstName());
+    public void fillTraveller_1_Info(String title, String fName, String lName) {
+        setTravellerTitle(title);
+        setTravellerFirstName(fName);
+        setTravellerLastName(lName);
     }
 
-    public void fillTraveller_2_Info() {
-        setTraveller2Title("MR");
-        setTraveller2FirstName(new Faker().name().firstName());
-        setTraveller2LastName(new Faker().name().firstName());
+    public void fillTraveller_2_Info(String title, String fName, String lName) {
+        setTraveller2Title(title);
+        setTraveller2FirstName(fName);
+        setTraveller2LastName(lName);
+    }
+
+    public void clickPayLater() {
+        scrollToDown(100, 10);
+        paylater.click();
+    }
+
+    public void clickAgreeBtn() {
+        if (!agreeCheckMark.isSelected())
+            customClick(agreeCheckMark);
     }
 
     public void clickBookingConfirm() {
-        scrollToDown(100, 3);
-        clickUsingJsExecutor(bookingConfirmBtn);
-        new WindowHandler(driver).switchToTab("Singapore Transfer: Hotel to Singapore Cruise Centre");
+        customClick(bookingConfirmBtn);
+        new WindowHandler(driver).switchToTab(1);
     }
 }
