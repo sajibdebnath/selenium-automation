@@ -150,6 +150,7 @@ public class BookingDetailsPage extends HomePage {
 
     public void clickBookingConfirm() {
         customClick(bookingConfirmBtn);
+        sleep(5);   // Waiting for new page loaded and return to main window
         new WindowHandler(driver).switchToTab(1);
     }
 }
