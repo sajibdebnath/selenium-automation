@@ -28,6 +28,6 @@ public class BookingTest extends BaseTest {
         detailsPage.clickAgreeBtn();
         detailsPage.clickBookingConfirm();
 
-        Assert.assertEquals(driver.getTitle(), SiteData.SINGAPORE_WEBSITE_PAGE_TITLE);
+        Assert.assertTrue(driver.getTitle().contains(SiteData.SINGAPORE_WEBSITE_PAGE_TITLE));
     }
 }

@@ -1,10 +1,12 @@
 package com.phptravels;
 
+import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomePage extends BasePage {
@@ -30,11 +32,14 @@ public class HomePage extends BasePage {
     private List<WebElement> searchBtns;
     @FindBy(partialLinkText = "Details")
     private List<WebElement> detailsLink;
+    @FindBy(xpath = "//h2[contains(text(),'Search Tours in')]")
+    private WebElement tourSearchResults;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
     private WebElement bookNowBtn;
     @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
     private List<WebElement> searchResults;
     private By searching = By.xpath("//li[@role='option' and text()='Searching…']");
+    private By days = By.cssSelector("td[class='day ']");
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -55,9 +60,14 @@ public class HomePage extends BasePage {
         clickSearchResults(destination);
     }
 
-    private void setDate(String dd) {
+    private void setDate(String tourDate) {
         date.click();
-        date.sendKeys(dd);
+        for (WebElement day : driver.findElements(days)) {
+            if (day.getText().equals(tourDate.split("-")[0]))
+                day.click();
+        }
+//        date.sendKeys(tourDate);      sendKeys() method not working because it's readonly.
+//        selectTourDate(days);         Another way to select tour date
     }
 
     private void setAdultsNumber(int number) {
@@ -83,8 +93,8 @@ public class HomePage extends BasePage {
     }
 
     public void clickDetailsLink(String name) {
+        waitForDisplayed(tourSearchResults);
         executor.executeScript("window.scrollBy(0, 100)");
-        waitForDisplayed(detailsLink.get(0));
         detailsLink.get(0).click();
     }
 
@@ -119,6 +129,32 @@ public class HomePage extends BasePage {
                 break;
             }
         }
+    }
+
+    void selectTourDate(By locator) {
+        List<WebElement> webElements = driver.findElements(locator);
+        List<WebElement> days = new ArrayList<>();
+
+        for (WebElement webElement : webElements) {
+            if (!webElement.getText().isEmpty())
+                days.add(webElement);
+        }
+
+        if (days.size() - 2 <= 0) {       // If current date is the last day of month then move to next month
+            days.clear();
+            List<WebElement> nexts = driver.findElements(By.cssSelector("th[class='next']"));
+            for (WebElement next : nexts) {
+                if (next.isDisplayed()) {
+                    next.click();
+                    break;
+                }
+            }
+            for (WebElement webElement : driver.findElements(locator)) {
+                if (!webElement.getText().isEmpty())
+                    days.add(webElement);
+            }
+        }
+        days.get(new Faker().random().nextInt(0, days.size() - 1)).click();
     }
 
     public boolean signupBtnDisplayed() {
