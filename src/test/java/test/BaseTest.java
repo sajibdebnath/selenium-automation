@@ -99,6 +99,7 @@ public class BaseTest implements Test {
         options.addArguments("--disable-notifications");
         options.addArguments("--ignore-certificate-errors");
         options.addArguments("--unlimited-storage");
+        options.addArguments("--window-size=1325x744");
         options.setHeadless(PropertiesUtils.getBoolean("HEADLESS"));
         return options;
     }
