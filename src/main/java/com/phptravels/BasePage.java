@@ -155,7 +155,7 @@ public class BasePage implements Page {
 
     public void scrollDown(int pixel) {
         executor.executeScript("window.scrollBy(0, " + pixel + ")");
-        sleepInMillis(PropertiesUtils.getInteger("SCROLL_INTERVAL"));
+        sleepInMillis(PropertiesUtils.getInteger("SCROLL_INTERVAL_DELAY"));
     }
 
     public void scrollAndClick(WebElement element) {
