@@ -16,8 +16,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import utils.DirPathUtils;
 import utils.EventReporter;
-import utils.Helpers;
+import utils.PropertiesUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +34,9 @@ public class BaseTest implements Test {
 
     @BeforeClass
     public void startDriver() {
-        WebDriver webDriver = getWebDriver(Helpers.getString("BROWSER"));
+        WebDriver webDriver = getWebDriver(PropertiesUtils.getString("BROWSER"));
         driver = getEventFiringWebDriver(webDriver);
-        driver.manage().timeouts().implicitlyWait(Helpers.getInteger("IMPLICIT_WAIT"), TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(PropertiesUtils.getInteger("IMPLICIT_WAIT"), TimeUnit.SECONDS);
         driver.manage().window().maximize();
     }
 
@@ -69,7 +70,7 @@ public class BaseTest implements Test {
      */
     private EventFiringWebDriver getEventFiringWebDriver(WebDriver webDriver) {
         driver = new EventFiringWebDriver(webDriver);
-        if (Helpers.getBoolean("EVENT_LOG"))
+        if (PropertiesUtils.getBoolean("EVENT_LOG"))
             return driver.register(new EventReporter());
         return driver;
     }
@@ -80,7 +81,7 @@ public class BaseTest implements Test {
     private void setChromeDriverProperty() {
         java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
         System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, Helpers.CHROME_DRIVER_PATH);
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, DirPathUtils.CHROME_DRIVER_PATH);
     }
 
     /**
@@ -98,7 +99,7 @@ public class BaseTest implements Test {
         options.addArguments("--disable-notifications");
         options.addArguments("--ignore-certificate-errors");
         options.addArguments("--unlimited-storage");
-        options.setHeadless(Helpers.getBoolean("HEADLESS"));
+        options.setHeadless(PropertiesUtils.getBoolean("HEADLESS"));
         return options;
     }
 
@@ -107,7 +108,7 @@ public class BaseTest implements Test {
      */
     private void setFirefoxDriverProperty() {
         java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        System.setProperty("webdriver.gecko.driver", Helpers.FIREFOX_DRIVER_PATH);
+        System.setProperty("webdriver.gecko.driver", DirPathUtils.FIREFOX_DRIVER_PATH);
         System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     }
 
@@ -118,7 +119,7 @@ public class BaseTest implements Test {
      */
     private FirefoxOptions getFirefoxOptions() {
         FirefoxOptions options = new FirefoxOptions();
-        options.setHeadless(Helpers.getBoolean("HEADLESS"));
+        options.setHeadless(PropertiesUtils.getBoolean("HEADLESS"));
         return options;
     }
 
@@ -135,7 +136,7 @@ public class BaseTest implements Test {
      */
     @BeforeMethod
     public void navigateToHomePage(Method method) {
-        driver.get(Helpers.getString("BASE_URL"));
+        driver.get(PropertiesUtils.getString("BASE_URL"));
         homePage = new HomePage(driver);
         homePage.cookieHandler();
     }
@@ -148,7 +149,7 @@ public class BaseTest implements Test {
     @AfterMethod
     public void takeScreenShot(ITestResult result) {
         String screenShotName = getScreenshotName(result.getName());
-        if (ITestResult.FAILURE == result.getStatus() && Helpers.getBoolean("SCREENSHOT_ON_FAILURE")) {
+        if (ITestResult.FAILURE == result.getStatus() && PropertiesUtils.getBoolean("SCREENSHOT_ON_FAILURE")) {
             File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             try {
                 FileUtils.copyFile(screenshotFile, new File(screenShotName));
@@ -165,7 +166,7 @@ public class BaseTest implements Test {
      * @return
      */
     private String getScreenshotName(String name) {
-        String screenshot = Helpers.SCREENSHOT_FOLDER + name + ".png";
+        String screenshot = DirPathUtils.SCREENSHOT_FOLDER + name + ".png";
         System.setProperty("SCREENSHOT_NAME", screenshot);
         return screenshot;
     }

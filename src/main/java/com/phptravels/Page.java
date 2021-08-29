@@ -15,17 +15,7 @@ public interface Page {
 
     void waitForDisappeared(By locator);
 
-    void scrollTo(WebElement element);
-
-    void scrollToDown(int pixel, int count);
-
-    void scrollToBottom();
-
-    void scrollToTop();
-
-    void scrollToNextPage();
-
-    void scrollToPreviousPage();
+    void scrollDown(int pixel);
 
     void setValue(WebElement element, int value);
 

@@ -1,23 +1,22 @@
 package com.phptravels;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
+import utils.PropertiesUtils;
 
 import java.time.Duration;
-import java.util.ResourceBundle;
 
 public class BasePage implements Page {
     WebDriver driver;
     JavascriptExecutor executor;
-    ResourceBundle resource = ResourceBundle.getBundle("config");
+
     /**
      * Instantiate fluent wait with Explicit time in seconds
      */
     FluentWait<String> wait = new FluentWait<>("")
-            .withTimeout(Duration.ofSeconds(Integer.parseInt(resource.getString("EXPLICIT_WAIT"))))
+            .withTimeout(Duration.ofSeconds(Integer.parseInt(PropertiesUtils.getString("EXPLICIT_WAIT"))))
             .pollingEvery(Duration.ofMillis(500)).ignoring(NoSuchElementException.class, NullPointerException.class);
 
     public BasePage(WebDriver driver) {
@@ -81,15 +80,6 @@ public class BasePage implements Page {
         });
     }
 
-
-    public boolean isElementPresent(By locator) {
-        try {
-            return driver.findElements(locator).size() > 0;
-        } catch (org.openqa.selenium.NoSuchElementException e) {
-            return false;
-        }
-    }
-
     /**
      * Waiting some millis for not executing process
      *
@@ -114,69 +104,6 @@ public class BasePage implements Page {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Scrolling to the element position
-     *
-     * @param element
-     */
-    @Override
-    public void scrollTo(WebElement element) {
-        sleepInMillis(500);
-        executor.executeScript("arguments[0].scrollIntoView(false);", element);
-        sleepInMillis(500);
-    }
-
-    /**
-     * Scrolling page down by pixel
-     *
-     * @param pixel
-     * @param count
-     */
-    @Override
-    public void scrollToDown(int pixel, int count) {
-        for (int i = 0; i < count; i++) {
-            executor.executeScript("window.scrollBy(0, " + pixel + ")");
-            sleepInMillis(100);
-        }
-        sleep(1);
-    }
-
-    /**
-     * Go to bottom of the page
-     */
-    @Override
-    public void scrollToBottom() {
-        sleepInMillis(500);
-        executor.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-    }
-
-    /**
-     * Go to top of the page
-     */
-    @Override
-    public void scrollToTop() {
-        sleepInMillis(500);
-        executor.executeScript("window.scrollTo(0, 0)");
-    }
-
-    /**
-     * Go to next page using keyboard space
-     */
-    @Override
-    public void scrollToNextPage() {
-        Actions actions = new Actions(driver);
-        actions.sendKeys(Keys.chord(Keys.SPACE)).build().perform();
-    }
-
-    /**
-     * Go to next page using shift keyboard space
-     */
-    @Override
-    public void scrollToPreviousPage() {
-        Actions actions = new Actions(driver);
-        actions.sendKeys(Keys.chord(Keys.SHIFT, Keys.SPACE)).build().perform();
     }
 
     /**
@@ -225,16 +152,33 @@ public class BasePage implements Page {
         select.selectByValue(text);
     }
 
-    /**
-     * First try to click element by selenium and if get an exception then use javascript executor
-     *
-     * @param element
-     */
-    public void customClick(WebElement element) {
+
+    public void scrollDown(int pixel) {
+        executor.executeScript("window.scrollBy(0, " + pixel + ")");
+        sleepInMillis(PropertiesUtils.getInteger("SCROLL_INTERVAL"));
+    }
+
+    public void scrollAndClick(WebElement element) {
         try {
             element.click();
-        } catch (org.openqa.selenium.ElementClickInterceptedException e) {
-            executor.executeScript("arguments[0].click();", element);
+        } catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.ElementClickInterceptedException e) {
+            scrollToElement(element);
+            try {
+                element.click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException ignore) {
+                executor.executeScript("arguments[0].click();", element);
+            }
+        }
+    }
+
+    public void scrollToElement(WebElement element) {
+        for (int i = 0; i < PropertiesUtils.getInteger("SCROLL_COUNT_MAX"); i++) {
+            try {
+                if (element.isDisplayed())
+                    break;
+            } catch (org.openqa.selenium.NoSuchElementException ignore) {
+                scrollDown(PropertiesUtils.getInteger("SCROLL_BY_PIXEL"));
+            }
         }
     }
 }

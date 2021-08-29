@@ -6,7 +6,11 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-public class SignUpPage extends LoginPage {
+public class SignUpPage extends HomePage {
+    @FindBy(name = "email")
+    private WebElement email;
+    @FindBy(name = "password")
+    private WebElement password;
     @FindBy(name = "first_name")
     private WebElement firstName;
     @FindBy(name = "last_name")
@@ -37,9 +41,21 @@ public class SignUpPage extends LoginPage {
     }
 
     private void selectAccountType(String type) {
-        scrollToDown(100, 2);
-        typeOption.get(5).click();
+        scrollAndClick(typeOption.get(5));
         clickSearchResults(type);
+    }
+
+    void setEmail(String email_addrs) {
+        setValue(email, email_addrs);
+    }
+
+    void setPassword(String pass) {
+        setValue(password, pass);
+    }
+
+    public void fillUserCredential(String email, String pass) {
+        setEmail(email);
+        setPassword(pass);
     }
 
     public void fillCustomerInfo(
@@ -55,8 +71,7 @@ public class SignUpPage extends LoginPage {
     }
 
     public LoginPage clickSignUpBtn() {
-        scrollToDown(100, 5);
-        customClick(signUpBtn);
+        scrollAndClick(signUpBtn);
         return new LoginPage(driver);
     }
 }

@@ -55,6 +55,7 @@ public class HomePage extends BasePage {
     }
 
     private void searchCity(String destination) {
+        waitForDisplayed(searchByCity);
         searchByCity.click();
         searchByText(destination);
         clickSearchResults(destination);
@@ -66,13 +67,13 @@ public class HomePage extends BasePage {
             if (day.getText().equals(tourDate.split("-")[0]))
                 day.click();
         }
-//        date.sendKeys(tourDate);      sendKeys() method not working because it's readonly.
-//        selectTourDate(days);         Another way to select tour date
+//        date.sendKeys(tourDate);      //  sendKeys() method not working because it's readonly.
+//        selectTourDate(days);         //  Another way to select tour date
     }
 
     private void setAdultsNumber(int number) {
-        waitForDisplayed(travellerOption);
         travellerOption.click();
+        waitForDisplayed(adultsNumber);
         setValue(adultsNumber, number);
     }
 
@@ -93,9 +94,8 @@ public class HomePage extends BasePage {
     }
 
     public void clickDetailsLink(String name) {
-        waitForDisplayed(tourSearchResults);
-        executor.executeScript("window.scrollBy(0, 100)");
-        detailsLink.get(0).click();
+        waitForDisplayed(tourSearchResults, 30);
+        scrollAndClick(detailsLink.get(0));
     }
 
     public SignUpPage clickSignUpLink() {
@@ -111,12 +111,12 @@ public class HomePage extends BasePage {
     }
 
     public BookingDetailsPage clickBookNowBtn() {
-        scrollTo(bookNowBtn);
-        bookNowBtn.click();
+        scrollAndClick(bookNowBtn);
         return new BookingDetailsPage(driver);
     }
 
     void searchByText(String text) {
+        scrollAndClick(searchField);
         searchField.sendKeys(text);
         waitForDisappeared(searching);
         clickSearchResults(text);
@@ -131,6 +131,15 @@ public class HomePage extends BasePage {
         }
     }
 
+    public boolean signupBtnDisplayed() {
+        return signUpLink.isDisplayed();
+    }
+
+    /**
+     * dynamically select available tour date
+     *
+     * @param locator
+     */
     void selectTourDate(By locator) {
         List<WebElement> webElements = driver.findElements(locator);
         List<WebElement> days = new ArrayList<>();
@@ -155,9 +164,5 @@ public class HomePage extends BasePage {
             }
         }
         days.get(new Faker().random().nextInt(0, days.size() - 1)).click();
-    }
-
-    public boolean signupBtnDisplayed() {
-        return signUpLink.isDisplayed();
     }
 }

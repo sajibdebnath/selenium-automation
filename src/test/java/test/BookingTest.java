@@ -22,8 +22,8 @@ public class BookingTest extends BaseTest {
                 SignupData.EMAIL, SignupData.PHONE_NUMBER,
                 SignupData.ADDRESS, SignupData.COUNTRY,
                 SignupData.NATIONALITY);
-        detailsPage.fillTraveller_1_Info(SignupData.TITLE_1, SignupData.FIRST_NAME, SignupData.LAST_NAME);
-        detailsPage.fillTraveller_2_Info(SignupData.TITLE_2, SignupData.FIRST_NAME, SignupData.LAST_NAME);
+        detailsPage.fillTraveller_1_Info(SignupData.TITLE_1, SignupData.TRAVELLER_1_FNAME, SignupData.TRAVELLER_1_LNAME);
+        detailsPage.fillTraveller_2_Info(SignupData.TITLE_2, SignupData.TRAVELLER_2_FNAME, SignupData.TRAVELLER_2_LNAME);
         detailsPage.clickPayLater();
         detailsPage.clickAgreeBtn();
         detailsPage.clickBookingConfirm();

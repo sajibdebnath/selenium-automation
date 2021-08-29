@@ -65,8 +65,7 @@ public class BookingDetailsPage extends HomePage {
     }
 
     private void setCountryName(String country) {
-        scrollToDown(100, 2);
-        dropdownOption.get(0).click();
+        scrollAndClick(dropdownOption.get(0));
         searchByText(country);
     }
 
@@ -76,8 +75,7 @@ public class BookingDetailsPage extends HomePage {
     }
 
     private void setTravellerTitle(String title) {
-        scrollToDown(100, 5);
-        travellerTitle.click();
+        scrollAndClick(travellerTitle);
         selectTitle(title);
     }
 
@@ -90,8 +88,7 @@ public class BookingDetailsPage extends HomePage {
     }
 
     private void setTraveller2Title(String title) {
-        scrollToDown(100, 4);
-        traveller2Title.click();
+        scrollAndClick(traveller2Title);
         selectTitle(title);
     }
 
@@ -139,17 +136,16 @@ public class BookingDetailsPage extends HomePage {
     }
 
     public void clickPayLater() {
-        scrollToDown(100, 10);
-        paylater.click();
+        scrollAndClick(paylater);
     }
 
     public void clickAgreeBtn() {
         if (!agreeCheckMark.isSelected())
-            customClick(agreeCheckMark);
+            scrollAndClick(agreeCheckMark);
     }
 
     public void clickBookingConfirm() {
-        customClick(bookingConfirmBtn);
+        scrollAndClick(bookingConfirmBtn);
         sleep(5);   // Waiting for new page loaded and return to main window
         new WindowHandler(driver).switchToTab(1);
     }
