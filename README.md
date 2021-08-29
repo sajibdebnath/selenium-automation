@@ -22,5 +22,5 @@ BASE_URL=https://www.phptravels.net
 - Open terminal or cmd
 - Go to project root directory command `cd ~/selenium-automation`
 - Run all tests from suite use command `mvn clean test -q` (-q flag for hiding the console warning log)
-- Run all tests in a class use command `mvn clean test -Dtest=LoginTest -q`
-- Run test method in a class use command `mvn clean test -Dtest=LoginTest#loginAndLogoutTest -q`
+- Run all tests in a class use command `mvn clean test -Dtest='LoginTest' -q`
+- Run test method in a class use command `mvn clean test -Dtest='LoginTest#loginAndLogoutTest' -q`
