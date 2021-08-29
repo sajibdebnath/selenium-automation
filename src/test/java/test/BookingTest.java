@@ -4,7 +4,6 @@ import com.phptravels.BookingDetailsPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import testdata.SignupData;
-import testdata.SiteData;
 import testdata.TourData;
 
 public class BookingTest extends BaseTest {
@@ -14,7 +13,7 @@ public class BookingTest extends BaseTest {
     public void bookingTicketAsGuestUserTest() {
         homePage.clickToursTab();
         homePage.searchTravelTour(TourData.DESTINATION, TourData.TRAVEL_DATE, TourData.ADULTS);
-        homePage.clickDetailsLink(TourData.SINGAPORE_DUCK_TOUR);
+        homePage.clickTourDetailsLink(TourData.SINGAPORE_DUCK_TOUR);
         detailsPage = homePage.clickBookNowBtn();
 
         detailsPage.fillCustomerDetailsInfo(
@@ -27,7 +26,6 @@ public class BookingTest extends BaseTest {
         detailsPage.clickPayLater();
         detailsPage.clickAgreeBtn();
         detailsPage.clickBookingConfirm();
-
-        Assert.assertTrue(driver.getTitle().contains(SiteData.SINGAPORE_WEBSITE_PAGE_TITLE));
+        Assert.assertEquals(driver.getTitle(), TourData.SINGAPORE_DUCK_TOUR);
     }
 }

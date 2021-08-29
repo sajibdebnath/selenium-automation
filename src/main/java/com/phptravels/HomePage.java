@@ -34,6 +34,8 @@ public class HomePage extends BasePage {
     private List<WebElement> detailsLink;
     @FindBy(xpath = "//h2[contains(text(),'Search Tours in')]")
     private WebElement tourSearchResults;
+    @FindBy(css = "ul>li[data-b='']")
+    private List<WebElement> tourLists;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
     private WebElement bookNowBtn;
     @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
@@ -64,8 +66,10 @@ public class HomePage extends BasePage {
     private void setDate(String tourDate) {
         date.click();
         for (WebElement day : driver.findElements(days)) {
-            if (day.getText().equals(tourDate.split("-")[0]))
+            if (day.getText().equals(tourDate.split("-")[0])) {
                 day.click();
+                break;
+            }
         }
 //        date.sendKeys(tourDate);      //  sendKeys() method not working because it's readonly.
 //        selectTourDate(days);         //  Another way to select tour date
@@ -93,12 +97,18 @@ public class HomePage extends BasePage {
         clickSearchBtn();
     }
 
-    public void clickDetailsLink(String name) {
+    public void clickTourDetailsLink(String name) {
         waitForDisplayed(tourSearchResults, 30);
-        scrollAndClick(detailsLink.get(0));
+        for (int i = 0; i < tourLists.size(); i++) {
+            if (tourLists.get(i).getText().contains(name)) {
+                scrollAndClick(detailsLink.get(i));
+                break;
+            }
+        }
     }
 
     public SignUpPage clickSignUpLink() {
+        waitForDisplayed(signUpLink);
         signUpLink.click();
         return new SignUpPage(driver);
     }
@@ -106,11 +116,13 @@ public class HomePage extends BasePage {
     public LoginPage clickLoginLink() {
         if (driver.findElements(By.linkText("Logout")).size() > 0)
             new DashboardPage(driver).clickLogout();
+        waitForDisplayed(loginLink);
         loginLink.click();
         return new LoginPage(driver);
     }
 
     public BookingDetailsPage clickBookNowBtn() {
+        waitForDisplayed(bookNowBtn);
         scrollAndClick(bookNowBtn);
         return new BookingDetailsPage(driver);
     }
