@@ -12,28 +12,38 @@ public class LocatorUtils {
      * @return
      */
     public static By getLocator(WebElement element) {
-        String locator[] = element.toString().split(": ");
-        if (locator[locator.length - 2].contains("xpath"))
-            return By.xpath(StringUtils.removeEnd(locator[locator.length - 1], "]"));
-        else {
-            switch (locator[locator.length - 2].split(" '")[1]) {
-                case "By.id":
-                    return By.id(StringUtils.removeEnd(locator[locator.length - 1], "'"));
-                case "By.name":
-                    return By.name(StringUtils.removeEnd(locator[locator.length - 1], "'"));
-                case "By.cssSelector":
-                    return By.cssSelector(StringUtils.removeEnd(locator[locator.length - 1], "'"));
-                case "By.className":
-                    return By.className(StringUtils.removeEnd(locator[locator.length - 1], "'"));
-                case "By.tagName":
-                    return By.tagName(StringUtils.removeEnd(locator[locator.length - 1], "'"));
-                case "By.linkText":
-                    return By.linkText(StringUtils.removeEnd(locator[locator.length - 1], "'"));
-                case "By.partialLinkText":
-                    return By.partialLinkText(StringUtils.removeEnd(locator[locator.length - 1], "'"));
-                default:
-                    return null;
-            }
+        String[] locator;
+        String str = element.toString();
+        locator = element.toString().contains(" -> ") ?
+                str.split(" -> ")[1].replaceFirst("]", "").split(": ") :
+                StringUtils.removeEnd(str.split(" '")[1], "'").split(": ");
+        switch (locator[0]) {
+            case "id":
+            case "By.id":
+                return By.id(locator[1]);
+            case "name":
+            case "By.name":
+                return By.name(locator[1]);
+            case "css selector":
+            case "By.cssSelector":
+                return By.cssSelector(locator[1]);
+            case "className":
+            case "By.className":
+                return By.className(locator[1]);
+            case "tagName":
+            case "By.tagName":
+                return By.tagName(locator[1]);
+            case "partial link":
+            case "By.linkText":
+                return By.linkText(locator[1]);
+            case "partial link text":
+            case "By.partialLinkText":
+                return By.partialLinkText(locator[1]);
+            case "xpath":
+            case "By.xpath":
+                return By.xpath(locator[1]);
+            default:
+                return By.linkText("!!!!!!! " + "No suitable locator found." + " !!!!!!!");
         }
     }
 }
