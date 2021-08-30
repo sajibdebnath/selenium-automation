@@ -12,38 +12,38 @@ public class LocatorUtils {
      * @return
      */
     public static By getLocator(WebElement element) {
-        String[] locator;
+        String[] type;
         String str = element.toString();
-        locator = element.toString().contains(" -> ") ?
+        type = element.toString().contains(" -> ") ?
                 StringUtils.removeEnd(str.split(" -> ")[1], "]").split(": ") :
-                StringUtils.removeEnd(str.split(" '")[1], "'").split(": ");
-        switch (locator[0]) {
+                StringUtils.removeEnd(str.split(" 'By")[1], "'").split(": ");
+        switch (type[0]) {
             case "id":
             case "By.id":
-                return By.id(locator[1]);
+                return By.id(type[1]);
             case "name":
             case "By.name":
-                return By.name(locator[1]);
+                return By.name(type[1]);
             case "css selector":
             case "By.cssSelector":
-                return By.cssSelector(locator[1]);
+                return By.cssSelector(type[1]);
             case "className":
             case "By.className":
-                return By.className(locator[1]);
+                return By.className(type[1]);
             case "tagName":
             case "By.tagName":
-                return By.tagName(locator[1]);
+                return By.tagName(type[1]);
             case "partial link":
             case "By.linkText":
-                return By.linkText(locator[1]);
+                return By.linkText(type[1]);
             case "partial link text":
             case "By.partialLinkText":
-                return By.partialLinkText(locator[1]);
+                return By.partialLinkText(type[1]);
             case "xpath":
             case "By.xpath":
-                return By.xpath(locator[1]);
+                return By.xpath(type[1]);
             default:
-                return By.linkText("!!!!!!! " + "No suitable locator found." + " !!!!!!!");
+                return null;
         }
     }
 }
