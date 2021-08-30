@@ -17,7 +17,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import utils.DirPathUtils;
-import utils.EventReporter;
+import utils.EventListener;
 import utils.PropertiesUtils;
 
 import java.io.File;
@@ -70,9 +70,7 @@ public class BaseTest implements Test {
      */
     private EventFiringWebDriver getEventFiringWebDriver(WebDriver webDriver) {
         driver = new EventFiringWebDriver(webDriver);
-        if (PropertiesUtils.getBoolean("EVENT_LOG"))
-            return driver.register(new EventReporter());
-        return driver;
+        return driver.register(new EventListener());
     }
 
     /**
