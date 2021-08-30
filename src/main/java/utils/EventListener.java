@@ -7,12 +7,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 public class EventListener implements WebDriverEventListener {
-    public static Set<By> locators = new HashSet<>();
+    public static Set<By> locators = new LinkedHashSet<>();
     public static List<String> navigatesLink = new ArrayList<>();
     public static List<String> pagesTitle = new ArrayList<>();
     public static List<String> elementsText = new ArrayList<>();
