@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePage extends BasePage {
+    @FindBy(xpath = "//li[@role='option' and text()='Searching…']")
+    WebElement searching;
+    @FindBy(xpath = "//td[@class='day ']")
+    WebElement days;
+    @FindBy(css = "th[class='next']")
+    WebElement nextBtn;
     @FindBy(partialLinkText = "Signup")
     private WebElement signUpLink;
     @FindBy(partialLinkText = "Login")
@@ -41,20 +47,15 @@ public class HomePage extends BasePage {
     private WebElement bookNowBtn;
     @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
     private List<WebElement> searchResults;
-    @FindBy(xpath = "//li[@role='option' and text()='Searching…']")
-    WebElement searching;
-    @FindBy(xpath = "td[class='day ']")
-    WebElement days;
-    @FindBy(css = "th[class='next']")
-    WebElement nextBtn;
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
     public void cookieHandler() {
-        if (driver.findElements(LocatorUtils.getLocator(gotItBtn)).size() > 0)
+        if (isPresent(gotItBtn))
             gotItBtn.click();
+        waitForInvisibility(gotItBtn);
     }
 
     public void clickToursTab() {
@@ -70,14 +71,15 @@ public class HomePage extends BasePage {
 
     private void setDate(String tourDate) {
         date.click();
-        for (WebElement day : driver.findElements(LocatorUtils.getLocator(days))) {
-            if (day.getText().equals(tourDate.split("-")[0])) {
-                day.click();
-                break;
-            }
-        }
+        selectTourDate(days);           //  Another way to select tour date
+
 //        date.sendKeys(tourDate);      //  sendKeys() method not working because it's readonly.
-//        selectTourDate(days);         //  Another way to select tour date
+//        for (WebElement day : driver.findElements(LocatorUtils.getLocator(days))) {
+//            if (day.getText().equals(tourDate.split("-")[0])) {
+//                day.click();
+//                break;
+//            }
+//        }
     }
 
     private void setAdultsNumber(int number) {
@@ -103,7 +105,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickTourDetailsLink(String name) {
-        waitForVisibility(tourSearchResults, 30);
+        waitForVisibility(tourSearchResults);
         for (int i = 0; i < tourLists.size(); i++) {
             if (tourLists.get(i).getText().contains(name)) {
                 scrollAndClick(detailsLink.get(i));

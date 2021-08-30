@@ -2,7 +2,10 @@ package utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class LocatorUtils {
     /**
@@ -33,7 +36,7 @@ public class LocatorUtils {
             case "tagName":
             case "By.tagName":
                 return By.tagName(type[1]);
-            case "partial link":
+            case "link text":
             case "By.linkText":
                 return By.linkText(type[1]);
             case "partial link text":
@@ -45,5 +48,17 @@ public class LocatorUtils {
             default:
                 return null;
         }
+    }
+
+    public static List<WebElement> getElements(WebDriver driver, By by) {
+        return driver.findElements(by);
+    }
+
+    public static List<WebElement> getElementsWithText(WebDriver driver, String text) {
+        return driver.findElements(By.xpath("//*[contains(text(),'" + text + "')]"));
+    }
+
+    public static List<WebElement> getElementsWithExactText(WebDriver driver, String text) {
+        return driver.findElements(By.xpath("//*[text()='" + text + "']"));
     }
 }

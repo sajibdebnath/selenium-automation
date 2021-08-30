@@ -8,6 +8,8 @@ import utils.WindowHandler;
 
 import java.util.List;
 
+import static utils.LocatorUtils.getElements;
+
 public class BookingDetailsPage extends HomePage {
     @FindBy(name = "firstname")
     private WebElement firstName;
@@ -101,7 +103,7 @@ public class BookingDetailsPage extends HomePage {
     }
 
     private void selectTitle(String title) {
-        List<WebElement> titleElements = driver.findElements(By.xpath("//option[text()='" + title + "']"));
+        List<WebElement> titleElements = getElements(driver, By.xpath("//option[text()='" + title + "']"));
         for (WebElement element : titleElements) {
             if (element.isDisplayed()) {
                 element.click();

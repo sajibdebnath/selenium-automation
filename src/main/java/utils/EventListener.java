@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.Set;
 
 public class EventListener implements WebDriverEventListener {
-    public static Set<By> locators = new LinkedHashSet<>();
-    public static List<String> navigatesLink = new ArrayList<>();
-    public static List<String> pagesTitle = new ArrayList<>();
-    public static List<String> elementsText = new ArrayList<>();
-    public static List<String> switchWindowsName = new ArrayList<>();
-    public static List<String> screenshotsName = new ArrayList<>();
+    static Set<By> locators = new LinkedHashSet<>();
+    static List<String> navigatesLink = new ArrayList<>();
+    static List<String> pagesTitle = new ArrayList<>();
+    static List<String> elementsText = new ArrayList<>();
+    static List<String> switchWindowsName = new ArrayList<>();
+    static List<String> screenshotsName = new ArrayList<>();
+    public static Set<String> eventListener = new LinkedHashSet<>();
 
     @Override
     public void beforeAlertAccept(WebDriver driver) {
@@ -42,11 +43,13 @@ public class EventListener implements WebDriverEventListener {
     @Override
     public void beforeNavigateTo(String url, WebDriver driver) {
         navigatesLink.add(url);
+        eventListener.add(url);
     }
 
     @Override
     public void afterNavigateTo(String url, WebDriver driver) {
-        pagesTitle.add(driver.getTitle());
+        pagesTitle.add(url);
+        eventListener.add(url);
     }
 
     @Override
@@ -82,6 +85,7 @@ public class EventListener implements WebDriverEventListener {
     @Override
     public void beforeFindBy(By by, WebElement element, WebDriver driver) {
         locators.add(by);
+        eventListener.add(by.toString());
     }
 
     @Override
@@ -122,6 +126,7 @@ public class EventListener implements WebDriverEventListener {
     @Override
     public void beforeSwitchToWindow(String windowName, WebDriver driver) {
         switchWindowsName.add(windowName);
+        eventListener.add(windowName);
     }
 
     @Override
@@ -142,6 +147,8 @@ public class EventListener implements WebDriverEventListener {
     @Override
     public <X> void afterGetScreenshotAs(OutputType<X> target, X screenshot) {
         screenshotsName.add(System.getProperty("SCREENSHOT_NAME"));
+        eventListener.add(System.getProperty("SCREENSHOT_NAME"));
+
     }
 
     @Override

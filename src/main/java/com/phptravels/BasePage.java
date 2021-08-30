@@ -7,21 +7,22 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.LocatorUtils;
-import utils.PropsUtils;
+import utils.Utils;
 
 import java.time.Duration;
 
 public class BasePage implements Page {
-    WebDriver driver;
-    JavascriptExecutor executor;
+    protected WebDriver driver;
+    private JavascriptExecutor executor;
 
     /**
-     * Instantiate fluent wait with Explicit time in seconds
+     * Instantiate fluent wait with wait in seconds
      */
     FluentWait<String> wait = new FluentWait<>("")
-            .withTimeout(Duration.ofSeconds(Integer.parseInt(PropsUtils.getString("EXPLICIT_WAIT"))))
-            .pollingEvery(Duration.ofMillis(500)).ignoring(NoSuchElementException.class, NullPointerException.class);
+            .withTimeout(Duration.ofSeconds(Utils.getInteger("FLUENT_WAIT")))
+            .pollingEvery(Duration.ofMillis(Utils.getInteger("POLLING_DELAY")));
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
@@ -29,138 +30,81 @@ public class BasePage implements Page {
         PageFactory.initElements(driver, this);
     }
 
-    /**
-     * Waiting for element to be displayed
-     *
-     * @param element
-     * @param seconds
-     */
-    @Override
-    public void waitForVisibility(WebElement element, int seconds) {
-        wait.withTimeout(Duration.ofSeconds(seconds)).until(a -> element.isDisplayed());
+    public void waitAndClick(WebElement element) {
+        waitForVisibility(element);
+        element.click();
     }
 
-    /**
-     * Waiting for element to be displayed
-     *
-     * @param element
-     */
-    @Override
-    public void waitForVisibility(WebElement element) {
-        wait.until(a -> element.isDisplayed());
+    public void waitAndClick(WebElement element, int seconds) {
+        waitForVisibility(element, seconds);
+        element.click();
     }
 
-    /**
-     * Waiting for element to be disappear
-     *
-     * @param element
-     * @param seconds
-     */
-    public void waitForInvisibility(WebElement element, int seconds) {
-        wait.withTimeout(Duration.ofSeconds(seconds)).until(a -> {
-            try {
-                return driver.findElements(LocatorUtils.getLocator(element)).size() <= 0;
-            } catch (org.openqa.selenium.NoSuchElementException e) {
-                return true;
-            }
-        });
+    protected void waitForVisibility(WebElement element) {
+        waitForVisibility(element, Utils.getInteger("FLUENT_WAIT"));
     }
 
-    /**
-     * Waiting for element to be disappear
-     *
-     * @param element
-     */
-    @Override
-    public void waitForInvisibility(WebElement element) {
-        wait.until(a -> {
-            try {
-                return driver.findElements(LocatorUtils.getLocator(element)).size() <= 0;
-            } catch (org.openqa.selenium.NoSuchElementException e) {
-                return true;
-            }
-        });
+    protected void waitForVisibility(WebElement element, int seconds) {
+        wait.withTimeout(Duration.ofSeconds(seconds))
+                .ignoring(NoSuchElementException.class, NullPointerException.class)
+                .until(a -> element.isDisplayed());
     }
 
-    /**
-     * Waiting some millis for not executing process
-     *
-     * @param milliseconds
-     */
-    public void sleepInMillis(long milliseconds) {
+    protected void waitForInvisibility(WebElement element) {
+        waitForInvisibility(element, Utils.getInteger("FLUENT_WAIT"));
+    }
+
+    protected void waitForInvisibility(WebElement element, int seconds) {
+        wait.withTimeout(Duration.ofSeconds(seconds))
+                .until(a -> {
+                    try {
+                        return !element.isDisplayed();
+                    } catch (org.openqa.selenium.NoSuchElementException e) {
+                        return true;
+                    }
+                });
+    }
+
+    protected boolean isPresent(WebElement element) {
+        return isPresent(element, Utils.getInteger("IMPLICITLY_WAIT"));
+    }
+
+    protected boolean isPresent(WebElement element, int seconds) {
+        WebDriverWait wait = new WebDriverWait(driver, seconds);
         try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            return wait.until(a -> driver.findElements(LocatorUtils.getLocator(element)).size() > 0);
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
         }
     }
 
-    /**
-     * Waiting some millis for not executing process
-     *
-     * @param seconds
-     */
-    public void sleep(int seconds) {
-        try {
-            Thread.sleep(1000 * seconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    protected void setValue(WebElement element, int value) {
+        setValue(element, Integer.toString(value));
     }
 
-    /**
-     * Clear input filed and insert value
-     *
-     * @param element
-     * @param value
-     */
-    @Override
-    public void setValue(WebElement element, int value) {
-        element.clear();
-        element.sendKeys(Integer.toString(value));
-    }
-
-    /**
-     * Clear input filed and insert text
-     *
-     * @param element
-     * @param text
-     */
-    @Override
-    public void setValue(WebElement element, String text) {
+    protected void setValue(WebElement element, String text) {
         element.clear();
         element.sendKeys(text);
     }
 
-    /**
-     * Select text value from dropdown options
-     *
-     * @param element
-     * @param text
-     */
-    public void selectByVisibleText(WebElement element, String text) {
+    protected void selectByVisibleText(WebElement element, String text) {
         Select select = new Select(element);
         select.selectByVisibleText(text);
     }
 
-    /**
-     * Select text value from dropdown options
-     *
-     * @param element
-     * @param text
-     */
-    public void selectByValue(WebElement element, String text) {
+    protected void selectByValue(WebElement element, String text) {
         Select select = new Select(element);
         select.selectByValue(text);
     }
 
 
-    public void scrollDown(int pixel) {
+    protected void scrollDown(int pixel) {
         executor.executeScript("window.scrollBy(0, " + pixel + ")");
-        sleepInMillis(PropsUtils.getInteger("SCROLL_INTERVAL_DELAY"));
+        sleepInMillis(Utils.getInteger("SCROLL_INTERVAL_DELAY"));
     }
 
-    public void scrollAndClick(WebElement element) {
+
+    protected void scrollAndClick(WebElement element) {
         try {
             element.click();
         } catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.ElementClickInterceptedException e) {
@@ -173,14 +117,26 @@ public class BasePage implements Page {
         }
     }
 
-    public void scrollToElement(WebElement element) {
-        for (int i = 0; i < PropsUtils.getInteger("SCROLL_COUNT_MAX"); i++) {
+    protected void scrollToElement(WebElement element) {
+        for (int i = 0; i < Utils.getInteger("SCROLL_COUNT_MAX"); i++) {
             try {
                 if (element.isDisplayed())
                     break;
             } catch (org.openqa.selenium.NoSuchElementException ignore) {
-                scrollDown(PropsUtils.getInteger("SCROLL_BY_PIXEL"));
+                scrollDown(Utils.getInteger("SCROLL_BY_PIXEL"));
             }
+        }
+    }
+
+    protected void sleep(int seconds) {
+        sleepInMillis(1000 * seconds);
+    }
+
+    protected void sleepInMillis(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
