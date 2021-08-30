@@ -2,7 +2,7 @@ package utils;
 
 import java.util.ResourceBundle;
 
-public class PropertiesUtils {
+public class PropsUtils {
     private static ResourceBundle bundle = ResourceBundle.getBundle("config");
 
     public static String getString(String key) {

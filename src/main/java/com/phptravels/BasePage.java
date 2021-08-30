@@ -4,7 +4,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-import utils.PropertiesUtils;
+import utils.PropsUtils;
 
 import java.time.Duration;
 
@@ -16,7 +16,7 @@ public class BasePage implements Page {
      * Instantiate fluent wait with Explicit time in seconds
      */
     FluentWait<String> wait = new FluentWait<>("")
-            .withTimeout(Duration.ofSeconds(Integer.parseInt(PropertiesUtils.getString("EXPLICIT_WAIT"))))
+            .withTimeout(Duration.ofSeconds(Integer.parseInt(PropsUtils.getString("EXPLICIT_WAIT"))))
             .pollingEvery(Duration.ofMillis(500)).ignoring(NoSuchElementException.class, NullPointerException.class);
 
     public BasePage(WebDriver driver) {
@@ -155,7 +155,7 @@ public class BasePage implements Page {
 
     public void scrollDown(int pixel) {
         executor.executeScript("window.scrollBy(0, " + pixel + ")");
-        sleepInMillis(PropertiesUtils.getInteger("SCROLL_INTERVAL_DELAY"));
+        sleepInMillis(PropsUtils.getInteger("SCROLL_INTERVAL_DELAY"));
     }
 
     public void scrollAndClick(WebElement element) {
@@ -172,12 +172,12 @@ public class BasePage implements Page {
     }
 
     public void scrollToElement(WebElement element) {
-        for (int i = 0; i < PropertiesUtils.getInteger("SCROLL_COUNT_MAX"); i++) {
+        for (int i = 0; i < PropsUtils.getInteger("SCROLL_COUNT_MAX"); i++) {
             try {
                 if (element.isDisplayed())
                     break;
             } catch (org.openqa.selenium.NoSuchElementException ignore) {
-                scrollDown(PropertiesUtils.getInteger("SCROLL_BY_PIXEL"));
+                scrollDown(PropsUtils.getInteger("SCROLL_BY_PIXEL"));
             }
         }
     }

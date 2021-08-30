@@ -1,6 +1,6 @@
 package utils;
 
-public class DirPathUtils {
+public class PathUtils {
     private static final String USER_DIR = System.getProperty("user.dir");
     public static final String SCREENSHOT_FOLDER = USER_DIR + "/screenshot/";
     private static final boolean OS_WINDOWS = System.getProperty("os.name").contains("Windows");

@@ -16,9 +16,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import utils.DirPathUtils;
+import utils.PathUtils;
 import utils.EventListener;
-import utils.PropertiesUtils;
+import utils.PropsUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,9 +34,9 @@ public class BaseTest implements Test {
 
     @BeforeClass
     public void startDriver() {
-        WebDriver webDriver = getWebDriver(PropertiesUtils.getString("BROWSER"));
+        WebDriver webDriver = getWebDriver(PropsUtils.getString("BROWSER"));
         driver = getEventFiringWebDriver(webDriver);
-        driver.manage().timeouts().implicitlyWait(PropertiesUtils.getInteger("IMPLICIT_WAIT"), TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(PropsUtils.getInteger("IMPLICIT_WAIT"), TimeUnit.SECONDS);
         driver.manage().window().maximize();
     }
 
@@ -79,7 +79,7 @@ public class BaseTest implements Test {
     private void setChromeDriverProperty() {
         java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
         System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, DirPathUtils.CHROME_DRIVER_PATH);
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, PathUtils.CHROME_DRIVER_PATH);
     }
 
     /**
@@ -98,7 +98,7 @@ public class BaseTest implements Test {
         options.addArguments("--ignore-certificate-errors");
         options.addArguments("--unlimited-storage");
         options.addArguments("--window-size=1325x744");
-        options.setHeadless(PropertiesUtils.getBoolean("HEADLESS"));
+        options.setHeadless(PropsUtils.getBoolean("HEADLESS"));
         return options;
     }
 
@@ -107,7 +107,7 @@ public class BaseTest implements Test {
      */
     private void setFirefoxDriverProperty() {
         java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        System.setProperty("webdriver.gecko.driver", DirPathUtils.FIREFOX_DRIVER_PATH);
+        System.setProperty("webdriver.gecko.driver", PathUtils.FIREFOX_DRIVER_PATH);
         System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     }
 
@@ -118,7 +118,7 @@ public class BaseTest implements Test {
      */
     private FirefoxOptions getFirefoxOptions() {
         FirefoxOptions options = new FirefoxOptions();
-        options.setHeadless(PropertiesUtils.getBoolean("HEADLESS"));
+        options.setHeadless(PropsUtils.getBoolean("HEADLESS"));
         return options;
     }
 
@@ -135,7 +135,7 @@ public class BaseTest implements Test {
      */
     @BeforeMethod
     public void navigateToHomePage(Method method) {
-        driver.get(PropertiesUtils.getString("BASE_URL"));
+        driver.get(PropsUtils.getString("BASE_URL"));
         homePage = new HomePage(driver);
         homePage.cookieHandler();
     }
@@ -148,7 +148,7 @@ public class BaseTest implements Test {
     @AfterMethod
     public void takeScreenShot(ITestResult result) {
         String screenShotName = getScreenshotName(result.getName());
-        if (ITestResult.FAILURE == result.getStatus() && PropertiesUtils.getBoolean("SCREENSHOT_ON_FAILURE")) {
+        if (ITestResult.FAILURE == result.getStatus() && PropsUtils.getBoolean("SCREENSHOT_ON_FAILURE")) {
             File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             try {
                 FileUtils.copyFile(screenshotFile, new File(screenShotName));
@@ -165,7 +165,7 @@ public class BaseTest implements Test {
      * @return
      */
     private String getScreenshotName(String name) {
-        String screenshot = DirPathUtils.SCREENSHOT_FOLDER + name + ".png";
+        String screenshot = PathUtils.SCREENSHOT_FOLDER + name + ".png";
         System.setProperty("SCREENSHOT_NAME", screenshot);
         return screenshot;
     }
