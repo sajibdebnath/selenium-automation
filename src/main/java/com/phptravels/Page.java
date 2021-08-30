@@ -7,13 +7,13 @@ import org.openqa.selenium.WebElement;
 public interface Page {
     WebDriver driver = null;
 
-    void waitForDisplayed(WebElement element, int seconds);
+    void waitForVisibility(WebElement element, int seconds);
 
-    void waitForDisplayed(WebElement element);
+    void waitForVisibility(WebElement element);
 
-    void waitForDisappeared(By locator, int seconds);
+    void waitForInvisibility(By locator, int seconds);
 
-    void waitForDisappeared(By locator);
+    void waitForInvisibility(By locator);
 
     void scrollDown(int pixel);
 

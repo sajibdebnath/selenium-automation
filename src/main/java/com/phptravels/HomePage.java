@@ -57,7 +57,7 @@ public class HomePage extends BasePage {
     }
 
     private void searchCity(String destination) {
-        waitForDisplayed(searchByCity);
+        waitForVisibility(searchByCity);
         searchByCity.click();
         searchByText(destination);
         clickSearchResults(destination);
@@ -77,7 +77,7 @@ public class HomePage extends BasePage {
 
     private void setAdultsNumber(int number) {
         travellerOption.click();
-        waitForDisplayed(adultsNumber);
+        waitForVisibility(adultsNumber);
         setValue(adultsNumber, number);
     }
 
@@ -98,7 +98,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickTourDetailsLink(String name) {
-        waitForDisplayed(tourSearchResults, 30);
+        waitForVisibility(tourSearchResults, 30);
         for (int i = 0; i < tourLists.size(); i++) {
             if (tourLists.get(i).getText().contains(name)) {
                 scrollAndClick(detailsLink.get(i));
@@ -108,7 +108,7 @@ public class HomePage extends BasePage {
     }
 
     public SignUpPage clickSignUpLink() {
-        waitForDisplayed(signUpLink);
+        waitForVisibility(signUpLink);
         signUpLink.click();
         return new SignUpPage(driver);
     }
@@ -116,13 +116,13 @@ public class HomePage extends BasePage {
     public LoginPage clickLoginLink() {
         if (driver.findElements(By.linkText("Logout")).size() > 0)
             new DashboardPage(driver).clickLogout();
-        waitForDisplayed(loginLink);
+        waitForVisibility(loginLink);
         loginLink.click();
         return new LoginPage(driver);
     }
 
     public BookingDetailsPage clickBookNowBtn() {
-        waitForDisplayed(bookNowBtn);
+        waitForVisibility(bookNowBtn);
         scrollAndClick(bookNowBtn);
         return new BookingDetailsPage(driver);
     }
@@ -130,7 +130,7 @@ public class HomePage extends BasePage {
     void searchByText(String text) {
         scrollAndClick(searchField);
         searchField.sendKeys(text);
-        waitForDisappeared(searching);
+        waitForInvisibility(searching);
         clickSearchResults(text);
     }
 

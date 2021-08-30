@@ -32,7 +32,7 @@ public class BasePage implements Page {
      * @param seconds
      */
     @Override
-    public void waitForDisplayed(WebElement element, int seconds) {
+    public void waitForVisibility(WebElement element, int seconds) {
         wait.withTimeout(Duration.ofSeconds(seconds)).until(a -> element.isDisplayed());
     }
 
@@ -42,7 +42,7 @@ public class BasePage implements Page {
      * @param element
      */
     @Override
-    public void waitForDisplayed(WebElement element) {
+    public void waitForVisibility(WebElement element) {
         wait.until(a -> element.isDisplayed());
     }
 
@@ -52,7 +52,7 @@ public class BasePage implements Page {
      * @param locator
      * @param seconds
      */
-    public void waitForDisappeared(By locator, int seconds) {
+    public void waitForInvisibility(By locator, int seconds) {
         wait.withTimeout(Duration.ofSeconds(seconds)).until(a -> {
             try {
                 driver.findElement(locator);
@@ -69,7 +69,7 @@ public class BasePage implements Page {
      * @param locator
      */
     @Override
-    public void waitForDisappeared(By locator) {
+    public void waitForInvisibility(By locator) {
         wait.until(a -> {
             try {
                 driver.findElement(locator);
