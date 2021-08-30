@@ -1,6 +1,5 @@
 package com.phptravels;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -11,9 +10,9 @@ public interface Page {
 
     void waitForVisibility(WebElement element);
 
-    void waitForInvisibility(By locator, int seconds);
+    void waitForInvisibility(WebElement element, int seconds);
 
-    void waitForInvisibility(By locator);
+    void waitForInvisibility(WebElement element);
 
     void scrollDown(int pixel);
 

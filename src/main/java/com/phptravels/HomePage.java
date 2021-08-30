@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import utils.LocatorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +41,19 @@ public class HomePage extends BasePage {
     private WebElement bookNowBtn;
     @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
     private List<WebElement> searchResults;
-    private By searching = By.xpath("//li[@role='option' and text()='Searching…']");
-    private By days = By.cssSelector("td[class='day ']");
+    @FindBy(xpath = "//li[@role='option' and text()='Searching…']")
+    WebElement searching;
+    @FindBy(xpath = "td[class='day ']")
+    WebElement days;
+    @FindBy(css = "th[class='next']")
+    WebElement nextBtn;
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
     public void cookieHandler() {
-        if (driver.findElements(By.id("cookie_stop")).size() > 0)
+        if (driver.findElements(LocatorUtils.getLocator(gotItBtn)).size() > 0)
             gotItBtn.click();
     }
 
@@ -65,7 +70,7 @@ public class HomePage extends BasePage {
 
     private void setDate(String tourDate) {
         date.click();
-        for (WebElement day : driver.findElements(days)) {
+        for (WebElement day : driver.findElements(LocatorUtils.getLocator(days))) {
             if (day.getText().equals(tourDate.split("-")[0])) {
                 day.click();
                 break;
@@ -150,10 +155,10 @@ public class HomePage extends BasePage {
     /**
      * dynamically select available tour date
      *
-     * @param locator
+     * @param element
      */
-    void selectTourDate(By locator) {
-        List<WebElement> webElements = driver.findElements(locator);
+    void selectTourDate(WebElement element) {
+        List<WebElement> webElements = driver.findElements(LocatorUtils.getLocator(element));
         List<WebElement> days = new ArrayList<>();
 
         for (WebElement webElement : webElements) {
@@ -163,14 +168,14 @@ public class HomePage extends BasePage {
 
         if (days.size() - 2 <= 0) {       // If current date is the last day of month then move to next month
             days.clear();
-            List<WebElement> nexts = driver.findElements(By.cssSelector("th[class='next']"));
+            List<WebElement> nexts = driver.findElements(LocatorUtils.getLocator(nextBtn));
             for (WebElement next : nexts) {
                 if (next.isDisplayed()) {
                     next.click();
                     break;
                 }
             }
-            for (WebElement webElement : driver.findElements(locator)) {
+            for (WebElement webElement : driver.findElements(LocatorUtils.getLocator(element))) {
                 if (!webElement.getText().isEmpty())
                     days.add(webElement);
             }

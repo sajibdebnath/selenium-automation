@@ -1,9 +1,13 @@
 package com.phptravels;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
+import utils.LocatorUtils;
 import utils.PropsUtils;
 
 import java.time.Duration;
@@ -49,14 +53,13 @@ public class BasePage implements Page {
     /**
      * Waiting for element to be disappear
      *
-     * @param locator
+     * @param element
      * @param seconds
      */
-    public void waitForInvisibility(By locator, int seconds) {
+    public void waitForInvisibility(WebElement element, int seconds) {
         wait.withTimeout(Duration.ofSeconds(seconds)).until(a -> {
             try {
-                driver.findElement(locator);
-                return false;
+                return driver.findElements(LocatorUtils.getLocator(element)).size() <= 0;
             } catch (org.openqa.selenium.NoSuchElementException e) {
                 return true;
             }
@@ -66,14 +69,13 @@ public class BasePage implements Page {
     /**
      * Waiting for element to be disappear
      *
-     * @param locator
+     * @param element
      */
     @Override
-    public void waitForInvisibility(By locator) {
+    public void waitForInvisibility(WebElement element) {
         wait.until(a -> {
             try {
-                driver.findElement(locator);
-                return false;
+                return driver.findElements(LocatorUtils.getLocator(element)).size() <= 0;
             } catch (org.openqa.selenium.NoSuchElementException e) {
                 return true;
             }
