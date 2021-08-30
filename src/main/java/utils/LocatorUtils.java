@@ -15,7 +15,7 @@ public class LocatorUtils {
         String[] locator;
         String str = element.toString();
         locator = element.toString().contains(" -> ") ?
-                str.split(" -> ")[1].replaceFirst("]", "").split(": ") :
+                StringUtils.removeEnd(str.split(" -> ")[1], "]").split(": ") :
                 StringUtils.removeEnd(str.split(" '")[1], "'").split(": ");
         switch (locator[0]) {
             case "id":
