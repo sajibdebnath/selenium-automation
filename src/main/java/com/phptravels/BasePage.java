@@ -4,7 +4,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.LocatorUtils;
 import utils.Utils;
 
@@ -75,10 +74,10 @@ public class BasePage implements Page {
     }
 
     protected boolean isPresent(By by, int seconds) {
-        WebDriverWait wait = new WebDriverWait(driver, seconds);
         try {
-            return wait.until(a -> driver.findElements(by).size() > 0);
-        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return wait.withTimeout(Duration.ofSeconds(seconds))
+                    .until(a -> driver.findElements(by).size() > 0);
+        } catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
             return false;
         }
     }

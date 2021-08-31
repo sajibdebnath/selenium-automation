@@ -106,7 +106,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickTourDetailsLink(String name) {
-        waitForVisibility(tourSearchResults);
+        waitForVisibility(tourSearchResults, 30);
         for (int i = 0; i < tourLists.size(); i++) {
             if (tourLists.get(i).getText().contains(name)) {
                 scrollAndClick(detailsLink.get(i));
