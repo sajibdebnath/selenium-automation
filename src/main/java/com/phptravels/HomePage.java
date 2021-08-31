@@ -64,14 +64,13 @@ public class HomePage extends BasePage {
     }
 
     private void searchCity(String destination) {
-        waitForVisibility(searchByCity);
-        searchByCity.click();
+        waitAndClick(searchByCity);
         searchByText(destination);
         clickSearchResults(destination);
     }
 
     private void setDate(String tourDate) {
-        date.click();
+        waitAndClick(date);
         selectTourDate(days);
 
 //        date.sendKeys(tourDate);      //  sendKeys() method not working because it's readonly.
@@ -84,7 +83,7 @@ public class HomePage extends BasePage {
     }
 
     private void setAdultsNumber(int number) {
-        travellerOption.click();
+        waitAndClick(travellerOption);
         waitForVisibility(adultsNumber);
         setValue(adultsNumber, number);
     }
@@ -116,16 +115,14 @@ public class HomePage extends BasePage {
     }
 
     public SignUpPage clickSignUpLink() {
-        waitForVisibility(signUpLink);
-        signUpLink.click();
+        waitAndClick(signUpLink);
         return new SignUpPage(driver);
     }
 
     public LoginPage clickLoginLink() {
         if (isPresent(By.linkText("Logout")))
             new DashboardPage(driver).clickLogout();
-        waitForVisibility(loginLink);
-        loginLink.click();
+        waitAndClick(loginLink);
         return new LoginPage(driver);
     }
 
