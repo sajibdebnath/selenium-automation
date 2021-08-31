@@ -47,20 +47,19 @@ public class BrowserUtils {
      * Instantiate webdriver
      */
     private WebDriver getWebDriver(String browser) {
-        String remoteProperty = System.getProperty("remote");
-        browser = remoteProperty.contains("true") ? "remote" : browser.toLowerCase();
-
-        switch (browser) {
-            case "chrome":
-                return getChromeDriver();
-            case "firefox":
-                return getFirefoxDriver();
-            case "remote":
-                return getRemoteDriver();
-            default:
-                System.out.println("[" + browser + "] is not a correct browser name.");
+        String remote = System.getProperty("remote");
+        if (remote == null) {
+            switch (browser) {
+                case "chrome":
+                    return getChromeDriver();
+                case "firefox":
+                    return getFirefoxDriver();
+                default:
+                    System.out.println("[" + browser + "] is not a correct browser name.");
+                    return null;
+            }
         }
-        return null;
+        return getRemoteDriver(remote.toLowerCase());
     }
 
     /**
@@ -86,24 +85,29 @@ public class BrowserUtils {
     /**
      * set remote webdriver
      */
-    private RemoteWebDriver getRemoteDriver() {
-        String browser = System.getProperty("browser") + "";
-        String address = System.getProperty("HUB_ADDRESS");
-        String remoteUrl = String.format("http://%s/wd/hub", address != null ?
-                address : Utils.getString("HUB_ADDRESS"));
-        try {
-            switch (browser) {
-                case "firefox":
-                    return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOptions());
-                case "chrome":
-                default:
-                    System.out.println("Select default(chrome) browser to run test!!!");
-                    return new RemoteWebDriver(new URL(remoteUrl), getChromeOptions());
-            }
-        } catch (MalformedURLException e) {
-            e.getLocalizedMessage();
+    private RemoteWebDriver getRemoteDriver(String remote) {
+        String browser = System.getProperty("browser");
+        String remoteUrl = String.format("http://%s/wd/hub", Utils.getString("HUB_ADDRESS"));
+        if (browser == null) {
+            System.out.println("Please enter a browser name.");
             return null;
         }
+        if (remote.equals("true")) {
+            try {
+                switch (browser) {
+                    case "chrome":
+                        return new RemoteWebDriver(new URL(remoteUrl), getChromeOptions());
+                    case "firefox":
+                        return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOptions());
+                    default:
+                        System.out.println("[" + browser + "] is not a correct browser name.");
+                        return null;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     /**

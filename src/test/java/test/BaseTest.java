@@ -3,7 +3,10 @@ package test;
 import com.phptravels.HomePage;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import utils.BrowserUtils;
 import utils.Utils;
 
@@ -35,10 +38,5 @@ public class BaseTest implements Test {
     public void takeScreenShotOnFailure(ITestResult result) {
         browser.getScreenShot(driver, result);
         new Utils().printEventLog();
-    }
-
-    @AfterSuite
-    public void printCustomReports() {
-
     }
 }

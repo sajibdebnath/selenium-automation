@@ -1,0 +1,32 @@
+#
+# docker-compose.yml
+#
+---
+version: '2'
+services:
+  hub:
+    image: selenium/hub:3.141.59-20201119
+    ports:
+    - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome
+    mem_reservation: 256m
+    shm_size: 1024
+    volumes:
+    - /dev/shm:/dev/shm
+    depends_on:
+    - hub
+    environment:
+      HUB_HOST: hub
+
+  firefox:
+    image: selenium/node-firefox
+    mem_reservation: 256m
+    shm_size: 1024
+    volumes:
+    - /dev/shm:/dev/shm
+    depends_on:
+    - hub
+    environment:
+      HUB_HOST: hub

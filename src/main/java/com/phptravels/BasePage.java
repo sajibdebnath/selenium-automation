@@ -13,25 +13,18 @@ public class BasePage implements Page {
     protected WebDriver driver;
     private JavascriptExecutor executor;
 
-    /**
-     * Instantiate fluent wait with wait in seconds
-     */
-    FluentWait<String> wait = new FluentWait<>("")
-            .withTimeout(Duration.ofSeconds(Utils.getInteger("FLUENT_WAIT")))
-            .pollingEvery(Duration.ofMillis(Utils.getInteger("POLLING_DELAY")));
-
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.executor = (JavascriptExecutor) driver;
         PageFactory.initElements(driver, this);
     }
 
-    public void waitAndClick(WebElement element) {
+    protected void waitAndClick(WebElement element) {
         waitForVisibility(element);
         element.click();
     }
 
-    public void waitAndClick(WebElement element, int seconds) {
+    protected void waitAndClick(WebElement element, int seconds) {
         waitForVisibility(element, seconds);
         element.click();
     }
@@ -41,7 +34,7 @@ public class BasePage implements Page {
     }
 
     protected void waitForVisibility(WebElement element, int seconds) {
-        wait.withTimeout(Duration.ofSeconds(seconds))
+        getFluentWait().withTimeout(Duration.ofSeconds(seconds))
                 .ignoring(NoSuchElementException.class, NullPointerException.class)
                 .until(a -> element.isDisplayed());
     }
@@ -51,7 +44,7 @@ public class BasePage implements Page {
     }
 
     protected void waitForInvisibility(WebElement element, int seconds) {
-        wait.withTimeout(Duration.ofSeconds(seconds))
+        getFluentWait().withTimeout(Duration.ofSeconds(seconds))
                 .until(a -> {
                     try {
                         return !element.isDisplayed();
@@ -75,7 +68,7 @@ public class BasePage implements Page {
 
     protected boolean isPresent(By by, int seconds) {
         try {
-            return wait.withTimeout(Duration.ofSeconds(seconds))
+            return getFluentWait().withTimeout(Duration.ofSeconds(seconds))
                     .until(a -> driver.findElements(by).size() > 0);
         } catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
             return false;
@@ -142,5 +135,14 @@ public class BasePage implements Page {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Instantiate fluent wait with wait in seconds
+     */
+    private FluentWait<String> getFluentWait() {
+        return new FluentWait<>("")
+                .withTimeout(Duration.ofSeconds(Utils.getInteger("FLUENT_WAIT")))
+                .pollingEvery(Duration.ofMillis(Utils.getInteger("POLLING_DELAY")));
     }
 }
