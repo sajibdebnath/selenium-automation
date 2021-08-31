@@ -61,6 +61,7 @@ public class Utils {
             for (By by : EventListener.locators)
                 System.out.println(String.format("%d. %s", i++, by));
             System.out.println();
+            EventListener.locators.clear();
         }
     }
 
@@ -74,6 +75,7 @@ public class Utils {
             for (String link : EventListener.navigatesLink)
                 System.out.println(String.format("%d. %s", i++, link));
             System.out.println();
+            EventListener.navigatesLink.clear();
         }
     }
 
@@ -87,6 +89,7 @@ public class Utils {
             for (String title : EventListener.pagesTitle)
                 System.out.println(String.format("%d. %s", i++, title));
             System.out.println();
+            EventListener.pagesTitle.clear();
         }
     }
 
@@ -100,6 +103,7 @@ public class Utils {
             for (String window : EventListener.switchWindowsName)
                 System.out.println(String.format("%d. %s", i++, window));
             System.out.println();
+            EventListener.switchWindowsName.clear();
         }
     }
 
@@ -113,6 +117,7 @@ public class Utils {
             for (String text : EventListener.elementsText)
                 System.out.println(String.format("%d. %s", i++, text));
             System.out.println();
+            EventListener.elementsText.clear();
         }
     }
 
@@ -126,6 +131,7 @@ public class Utils {
             for (String screenshot : EventListener.screenshotsName)
                 System.out.println(String.format("%d. %s", i++, screenshot));
             System.out.println();
+            EventListener.screenshotsName.clear();
         }
     }
 }

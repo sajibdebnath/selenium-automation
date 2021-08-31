@@ -5,17 +5,14 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import utils.BrowserUtils;
-import utils.EventListener;
 import utils.Utils;
 
 import java.lang.reflect.Method;
-import java.util.LinkedHashSet;
 
 public class BaseTest implements Test {
     HomePage homePage;
     EventFiringWebDriver driver;
     BrowserUtils browser = new BrowserUtils();
-    EventListener listener = new EventListener();
 
     @BeforeClass
     public void openBrowser() {

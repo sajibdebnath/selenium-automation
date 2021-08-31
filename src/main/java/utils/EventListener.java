@@ -18,7 +18,7 @@ public class EventListener implements WebDriverEventListener {
     static List<String> elementsText = new ArrayList<>();
     static List<String> switchWindowsName = new ArrayList<>();
     static List<String> screenshotsName = new ArrayList<>();
-    public static Set<String> eventListener = new LinkedHashSet<>();
+    static Set<String> eventListener = new LinkedHashSet<>();
 
     @Override
     public void beforeAlertAccept(WebDriver driver) {
