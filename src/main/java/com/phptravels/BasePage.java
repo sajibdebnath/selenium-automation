@@ -1,9 +1,6 @@
 package com.phptravels;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
@@ -66,13 +63,21 @@ public class BasePage implements Page {
     }
 
     protected boolean isPresent(WebElement element) {
-        return isPresent(element, Utils.getInteger("IMPLICITLY_WAIT"));
+        return isPresent(LocatorUtils.getLocator(element), Utils.getInteger("IMPLICITLY_WAIT"));
     }
 
     protected boolean isPresent(WebElement element, int seconds) {
+        return isPresent(LocatorUtils.getLocator(element), seconds);
+    }
+
+    protected boolean isPresent(By by) {
+        return isPresent(by, Utils.getInteger("IMPLICITLY_WAIT"));
+    }
+
+    protected boolean isPresent(By by, int seconds) {
         WebDriverWait wait = new WebDriverWait(driver, seconds);
         try {
-            return wait.until(a -> driver.findElements(LocatorUtils.getLocator(element)).size() > 0);
+            return wait.until(a -> driver.findElements(by).size() > 0);
         } catch (org.openqa.selenium.NoSuchElementException e) {
             return false;
         }
