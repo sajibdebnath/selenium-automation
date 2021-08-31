@@ -6,3 +6,4 @@ WORKDIR /app
 USER root
 COPY src /app/src
 COPY pom.xml /app
+COPY testng.xml /app

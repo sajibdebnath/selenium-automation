@@ -9,11 +9,14 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.ITestResult;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -44,19 +47,63 @@ public class BrowserUtils {
      * Instantiate webdriver
      */
     private WebDriver getWebDriver(String browser) {
-        switch (browser.toLowerCase()) {
+        String remoteProperty = System.getProperty("remote");
+        browser = remoteProperty.contains("true") ? "remote" : browser.toLowerCase();
+
+        switch (browser) {
             case "chrome":
-                setChromeDriverProperty();
-                return new ChromeDriver(getChromeOptions());
-
+                return getChromeDriver();
             case "firefox":
-                setFirefoxDriverProperty();
-                return new FirefoxDriver(getFirefoxOptions());
-
+                return getFirefoxDriver();
+            case "remote":
+                return getRemoteDriver();
             default:
                 System.out.println("[" + browser + "] is not a correct browser name.");
         }
         return null;
+    }
+
+    /**
+     * set properties and start chrome webdriver
+     */
+    private ChromeDriver getChromeDriver() {
+        java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, PathUtils.CHROME_DRIVER_PATH);
+        return new ChromeDriver(getChromeOptions());
+    }
+
+    /**
+     * set properties and start firefox webdriver
+     */
+    private FirefoxDriver getFirefoxDriver() {
+        java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
+        System.setProperty("webdriver.gecko.driver", PathUtils.FIREFOX_DRIVER_PATH);
+        System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
+        return new FirefoxDriver(getFirefoxOptions());
+    }
+
+    /**
+     * set remote webdriver
+     */
+    private RemoteWebDriver getRemoteDriver() {
+        String browser = System.getProperty("browser") + "";
+        String address = System.getProperty("HUB_ADDRESS");
+        String remoteUrl = String.format("http://%s/wd/hub", address != null ?
+                address : Utils.getString("HUB_ADDRESS"));
+        try {
+            switch (browser) {
+                case "firefox":
+                    return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOptions());
+                case "chrome":
+                default:
+                    System.out.println("Select default(chrome) browser to run test!!!");
+                    return new RemoteWebDriver(new URL(remoteUrl), getChromeOptions());
+            }
+        } catch (MalformedURLException e) {
+            e.getLocalizedMessage();
+            return null;
+        }
     }
 
     /**
@@ -65,21 +112,6 @@ public class BrowserUtils {
     private EventFiringWebDriver getEventFiringWebDriver(WebDriver webDriver) {
         driver = new EventFiringWebDriver(webDriver);
         return driver.register(new EventListener());
-    }
-
-    /**
-     * set driver property
-     */
-    private void setChromeDriverProperty() {
-        java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, PathUtils.CHROME_DRIVER_PATH);
-    }
-
-    private void setFirefoxDriverProperty() {
-        java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        System.setProperty("webdriver.gecko.driver", PathUtils.FIREFOX_DRIVER_PATH);
-        System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
     }
 
     /**
