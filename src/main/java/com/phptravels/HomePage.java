@@ -5,10 +5,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import utils.LocatorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static utils.LocatorUtils.getElements;
 
 public class HomePage extends BasePage {
     @FindBy(xpath = "//li[@role='option' and text()='Searching…']")
@@ -71,10 +72,10 @@ public class HomePage extends BasePage {
 
     private void setDate(String tourDate) {
         date.click();
-        selectTourDate(days);           //  Another way to select tour date
+        selectTourDate(days);
 
 //        date.sendKeys(tourDate);      //  sendKeys() method not working because it's readonly.
-//        for (WebElement day : driver.findElements(LocatorUtils.getLocator(days))) {
+//        for (WebElement day : getElements(driver, days)) {
 //            if (day.getText().equals(tourDate.split("-")[0])) {
 //                day.click();
 //                break;
@@ -121,7 +122,7 @@ public class HomePage extends BasePage {
     }
 
     public LoginPage clickLoginLink() {
-        if (driver.findElements(By.linkText("Logout")).size() > 0)
+        if (isPresent(By.linkText("Logout")))
             new DashboardPage(driver).clickLogout();
         waitForVisibility(loginLink);
         loginLink.click();
@@ -160,7 +161,7 @@ public class HomePage extends BasePage {
      * @param element
      */
     void selectTourDate(WebElement element) {
-        List<WebElement> webElements = driver.findElements(LocatorUtils.getLocator(element));
+        List<WebElement> webElements = getElements(driver, element);
         List<WebElement> days = new ArrayList<>();
 
         for (WebElement webElement : webElements) {
@@ -170,14 +171,14 @@ public class HomePage extends BasePage {
 
         if (days.size() - 2 <= 0) {       // If current date is the last day of month then move to next month
             days.clear();
-            List<WebElement> nexts = driver.findElements(LocatorUtils.getLocator(nextBtn));
-            for (WebElement next : nexts) {
+            List<WebElement> nextBtns = getElements(driver, nextBtn);
+            for (WebElement next : nextBtns) {
                 if (next.isDisplayed()) {
                     next.click();
                     break;
                 }
             }
-            for (WebElement webElement : driver.findElements(LocatorUtils.getLocator(element))) {
+            for (WebElement webElement : getElements(driver, element)) {
                 if (!webElement.getText().isEmpty())
                     days.add(webElement);
             }

@@ -50,6 +50,10 @@ public class LocatorUtils {
         }
     }
 
+    public static List<WebElement> getElements(WebDriver driver, WebElement element) {
+        return getElements(driver, LocatorUtils.getLocator(element));
+    }
+
     public static List<WebElement> getElements(WebDriver driver, By by) {
         return driver.findElements(by);
     }
