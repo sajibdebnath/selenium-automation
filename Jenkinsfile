@@ -22,7 +22,7 @@ node('master') {
     }
 
     stage("Run Tests") {
-        def exitCode = sh script: "docker run -t -e HUB_ADDRESS=${HUB_ADDRESS} --name ${CONTAINER} ${IMAGE} mvn clean test -Dbuild.number=${BUILD} -Dtest.suite=${SUITE_FILE}", returnStatus: true
+        def exitCode = sh script: "docker run -t -e HUB_ADDRESS=${HUB_ADDRESS} --name ${CONTAINER} ${IMAGE} mvn clean test -Dremote=true -Dbuild.number=${BUILD} -Dtest.suite=${SUITE_FILE}", returnStatus: true
         if (exitCode == 1)
             currentBuild.result = "UNSTABLE"
     }
