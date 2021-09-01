@@ -30,9 +30,10 @@
 - Open docker app
 - Open terminal or cmd
 - Go to project root directory `cd ~/selenium-automation`
-- Run docker-compose file `docker compose up`
-- Build docker image `docker build --tag ${TagName} .`
-- Run tests in docker container `run -it ${TagName} mvn clean test -Dremote=true -Dbrowser=chrome`
+- Run docker-compose-up `docker-compose -p phptravels_network up`
+- Run docker-scale `docker-compose -p phptravels_network scale firefox=5 chrome=5`
+- Build docker image `docker build --tag phptravels_image .`
+- Run tests in docker container `docker run -it phptravels_image mvn clean test -Dremote=true -Dbrowser=chrome`
 - Use `-Dbrowser=firefox` to run tests in docker with Firefox browser
 
 ### Project directory structure
