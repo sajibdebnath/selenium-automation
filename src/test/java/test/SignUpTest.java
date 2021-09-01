@@ -14,8 +14,10 @@ public class SignUpTest extends BaseTest {
     @Test
     public void signUpCustomerTest() {
         signUp = homePage.clickSignUpLink();
-        signUp.fillCustomerInfo(SignupData.FIRST_NAME, SignupData.LAST_NAME, SignupData.PHONE_NUMBER,
-                SignupData.EMAIL, SignupData.PASSWORD, SignupData.ACCOUNT_TYPE);
+        signUp.fillCustomerInfo(SignupData.FIRST_NAME,
+                SignupData.LAST_NAME, SignupData.PHONE_NUMBER,
+                SignupData.EMAIL, SignupData.PASSWORD,
+                SignupData.ACCOUNT_TYPE);
         login = signUp.clickSignUpBtn();
 
         Assert.assertEquals(login.successAlertMessage(), SiteData.SUCCESSFUL_SIGNUP_ALERT_MESSAGE);

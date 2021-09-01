@@ -15,26 +15,37 @@
     SCROLL_INTERVAL_DELAY=10
     SCREENSHOT_ON_FAILURE=true
     BASE_URL=https://www.phptravels.net
-    HUB_ADDRESS=172.17.0.1:4444
+    HUB_ADDRESS=hub:4444
 ```
-### Running Tests Locally with Maven
+### Running Tests locally with selenium standalone server
 - Open terminal or cmd
-- Go to project root directory command `cd ~/selenium-automation`
-- Run tests suite with command `mvn clean test`
+- Go to project root directory `cd ~/selenium-automation`
+- Run selenium standalone server `java -jar selenium-server-standalone-*.jar -port 4444`
+- On `/src/main/resources/config.properties` set `HUB_ADDRESS=localhost:4444`
+- Run tests suite with `mvn clean test -Dremote=true`
 ##### Example
-- Run all tests of a class `mvn clean test -Dtest='LoginTest'`
-- Run test method of a class `mvn clean test -Dtest='LoginTest#loginAndLogoutTest'`
+- Run all tests of a class `mvn clean test -Dremote=true -Dtest='LoginTest'`
+- Run test method of a class `mvn clean test -Dremote=true -Dtest='LoginTest#loginAndLogoutTest'`
 - To hide the console warning add `-q` flag `mvn clean test -q`
 
 ### Running Tests in Docker Container
 - Open docker app
 - Open terminal or cmd
 - Go to project root directory `cd ~/selenium-automation`
-- Run docker-compose-up `docker-compose -p phptravels_network up`
-- Run docker-scale `docker-compose -p phptravels_network scale firefox=5 chrome=5`
-- Build docker image `docker build --tag phptravels_image .`
-- Run tests in docker container `docker run -it phptravels_image mvn clean test -Dremote=true -Dbrowser=chrome`
-- Use `-Dbrowser=firefox` to run tests in docker with Firefox browser
+- On `/src/main/resources/config.properties` set `HUB_ADDRESS=hub:4444`
+- Set `TagName = "phptravels"`
+- Docker up `docker-compose -p ${TagName} up --remove-orphans -d`
+- Docker scale `docker-compose -p ${TagName} scale firefox=5 chrome=5`
+- Docker build image `docker build --tag ${TagName}_image .`
+- Docker container run with
+```commandline
+    docker run -it --network ${TagName}_default ${TagName}_image mvn clean test -Dremote=true
+    'OR'
+    docker run -it --network ${TagName}_default ${TagName}_image mvn clean test -Dremote=true -Dtest='LoginTest#loginAndLogoutTest'
+```
+- Docker down `docker-compose -p ${TagName} down --remove-orphans`
+- Docker container remove `docker rm ${TagName}_container`
+- Docker image remove `docker rmi ${TagName}_image -f`
 
 ### Project directory structure
 ```cmd
@@ -44,9 +55,6 @@
 │   ├── chromedriver.exe
 │   ├── geckodriver
 │   └── geckodriver.exe
-├── screenshot
-│   ├── bookingTicketAsGuestUserTest.png
-│   └── loginAndLogoutTest.png
 ├── src
 │   ├── main
 │   │   ├── java
@@ -82,10 +90,11 @@
 │               ├── TourData.java
 │               └── UserData.java
 ├── Dockerfile
-├── Jenkins
+├── Jenkinsfile
 ├── README.md
 ├── docker-compose.yml
 ├── pom.xml
 ├── selenium-automation.iml
+├── selenium-server-standalone-3.141.59.jar
 └── testng.xml
 ```

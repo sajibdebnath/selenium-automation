@@ -29,7 +29,7 @@ public class BrowserUtils {
      * Start webdriver
      */
     public EventFiringWebDriver startDriver() {
-        WebDriver webDriver = getWebDriver(Utils.getString("BROWSER"));
+        WebDriver webDriver = getWebDriver();
         driver = getEventFiringWebDriver(webDriver);
         driver.manage().timeouts().implicitlyWait(Utils.getInteger("IMPLICITLY_WAIT"), TimeUnit.SECONDS);
         driver.manage().window().maximize();
@@ -46,9 +46,25 @@ public class BrowserUtils {
     /**
      * Instantiate webdriver
      */
-    private WebDriver getWebDriver(String browser) {
-        String remote = System.getProperty("remote");
-        if (remote == null) {
+    private WebDriver getWebDriver() {
+        String browser = Utils.getString("BROWSER");
+        String remoteUrl = String.format("http://%s/wd/hub", Utils.getString("HUB_ADDRESS"));
+        boolean remote = System.getProperty("remote") != null && System.getProperty("remote").equals("true");
+        if (remote) {
+            try {
+                switch (browser) {
+                    case "chrome":
+                        return new RemoteWebDriver(new URL(remoteUrl), getChromeOptions());
+                    case "firefox":
+                        return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOptions());
+                    default:
+                        System.out.println("[" + browser + "] is not a correct browser name.");
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+        } else {
             switch (browser) {
                 case "chrome":
                     return getChromeDriver();
@@ -56,10 +72,9 @@ public class BrowserUtils {
                     return getFirefoxDriver();
                 default:
                     System.out.println("[" + browser + "] is not a correct browser name.");
-                    return null;
             }
         }
-        return getRemoteDriver(remote.toLowerCase());
+        return null;
     }
 
     /**
@@ -80,34 +95,6 @@ public class BrowserUtils {
         System.setProperty("webdriver.gecko.driver", PathUtils.FIREFOX_DRIVER_PATH);
         System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
         return new FirefoxDriver(getFirefoxOptions());
-    }
-
-    /**
-     * set remote webdriver
-     */
-    private RemoteWebDriver getRemoteDriver(String remote) {
-        String browser = System.getProperty("browser");
-        String remoteUrl = String.format("http://%s/wd/hub", Utils.getString("HUB_ADDRESS"));
-        if (browser == null) {
-            System.out.println("Please enter a browser name.");
-            return null;
-        }
-        if (remote.equals("true")) {
-            try {
-                switch (browser) {
-                    case "chrome":
-                        return new RemoteWebDriver(new URL(remoteUrl), getChromeOptions());
-                    case "firefox":
-                        return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOptions());
-                    default:
-                        System.out.println("[" + browser + "] is not a correct browser name.");
-                        return null;
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     /**
