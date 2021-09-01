@@ -1,7 +1,7 @@
 node('master') {
     def WORKSPACE = env.WORKSPACE
     def BUILD = env.BUILD_NUMBER
-    def SUITE_FILE = env.TEST_SUITE
+    def SUITE_FILE = env.SUITE_FILE
     def JOB_NAME = env.JOB_NAME.toLowerCase()
 
     def IMAGE = "${JOB_NAME}_${BUILD}_image"
@@ -21,7 +21,7 @@ node('master') {
     }
 
     stage("Run Tests") {
-        def exitCode = sh script: "docker run -t --network ${JOB_NAME}_default --name ${CONTAINER} ${IMAGE} mvn clean test -Dbuild.number=${BUILD} -Dtest.suite=${SUITE_FILE}.xml", returnStatus: true
+        def exitCode = sh script: "docker run -t --network ${JOB_NAME}_default --name ${CONTAINER} ${IMAGE} mvn clean test -Dbuild.number=${BUILD} -Dtest.suite=${SUITE_FILE}", returnStatus: true
         if (exitCode == 1)
             currentBuild.result = "UNSTABLE"
     }
