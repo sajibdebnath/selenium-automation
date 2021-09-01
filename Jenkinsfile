@@ -7,6 +7,7 @@ node('master') {
     def IMAGE = "${JOB_NAME}_${BUILD}_image"
     def CONTAINER = "${JOB_NAME}_${BUILD}_container"
     def LOCATION = "${WORKSPACE}/reports"
+    def HUB_ADDRESS = "hub:4444"
 
     stage("Checkout Repository") {
         checkout scm
@@ -21,7 +22,7 @@ node('master') {
     }
 
     stage("Run Tests") {
-        def exitCode = sh script: "docker run -t --network ${JOB_NAME}_default --name ${CONTAINER} ${IMAGE} mvn clean test -Dbuild.number=${BUILD} -Dtest.suite=${SUITE_FILE}", returnStatus: true
+        def exitCode = sh script: "docker run -t -e HUB_ADDRESS=${HUB_ADDRESS} --name ${CONTAINER} ${IMAGE} mvn clean test -Dbuild.number=${BUILD} -Dtest.suite=${SUITE_FILE}", returnStatus: true
         if (exitCode == 1)
             currentBuild.result = "UNSTABLE"
     }
@@ -36,7 +37,7 @@ node('master') {
                 allowMissing         : false,
                 alwaysLinkToLastBuild: true,
                 keepAll              : true,
-                reportDir            : "${LOCATION}/cucumber-html-reports",
+                reportDir            : "${LOCATION}/",
                 reportFiles          : 'index.html',
                 reportName           : 'HTML Report',
                 reportTitles         : ''])
