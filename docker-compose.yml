@@ -5,7 +5,7 @@
 version: '2'
 services:
   hub:
-    image: selenium/hub:3.141.59-20201119
+    image: selenium/hub
     ports:
     - "4444:4444"
 
@@ -30,3 +30,8 @@ services:
     - hub
     environment:
       HUB_HOST: hub
+
+  phptravel:
+    image: phptravels_image
+    depends_on:
+    - hub
