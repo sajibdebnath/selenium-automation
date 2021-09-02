@@ -14,39 +14,38 @@ public class LocatorUtils {
      * @param webElement
      * @return By
      */
-    public static By getBy(WebElement webElement) {
-        String[] locator = webElement.toString().split("(?=id:\\s|name:\\s|tagName:\\s|xpath:\\s|" +
-                "className:\\s|selector:\\s|cssSelector:\\s|link text:\\s|linkText:\\s)");
-        String[] type = StringUtils.removeEnd(locator[1], "]").split(":\\s");
+    public static By getByLocator(WebElement webElement) {
+        String element = webElement.toString().split("(?=id:\\s|name:\\s|tagName:\\s|xpath:\\s|" +
+                "className:\\s|selector:\\s|cssSelector:\\s|link text:\\s|linkText:\\s)")[1];
 
-        if (!type[0].equals("xpath"))
-            StringUtils.removeEnd(type[1], "'");
+        String[] locator = StringUtils.removeEnd(element, "]").split(":\\s");
+        String selector = StringUtils.removeEnd(locator[1], "'");
+        String method = locator[0];
+        if (method.equals("xpath"))
+            return By.xpath(locator[1]);
 
-        switch (type[0]) {
+        switch (method) {
             case "id":
-                return By.id(type[1]);
+                return By.id(selector);
             case "name":
-                return By.name(type[1]);
+                return By.name(selector);
             case "tagName":
-                return By.tagName(type[1]);
+                return By.tagName(selector);
             case "className":
-                return By.className(type[1]);
+                return By.className(selector);
             case "selector":
-                System.out.println(type[0]);
             case "cssSelector":
-                return By.cssSelector(type[1]);
+                return By.cssSelector(selector);
             case "linkText":
             case "link text":
-                return By.partialLinkText(type[1]);
-            case "xpath":
-                return By.xpath(type[1]);
+                return By.partialLinkText(selector);
             default:
                 return null;
         }
     }
 
     public static List<WebElement> getElements(WebDriver driver, WebElement element) {
-        return getElements(driver, LocatorUtils.getBy(element));
+        return getElements(driver, LocatorUtils.getByLocator(element));
     }
 
     public static List<WebElement> getElements(WebDriver driver, By by) {

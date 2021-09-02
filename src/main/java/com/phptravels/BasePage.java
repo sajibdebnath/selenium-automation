@@ -55,11 +55,11 @@ public class BasePage implements Page {
     }
 
     protected boolean isPresent(WebElement element) {
-        return isPresent(LocatorUtils.getBy(element), Utils.getInteger("IMPLICITLY_WAIT"));
+        return isPresent(LocatorUtils.getByLocator(element), Utils.getInteger("IMPLICITLY_WAIT"));
     }
 
     protected boolean isPresent(WebElement element, int seconds) {
-        return isPresent(LocatorUtils.getBy(element), seconds);
+        return isPresent(LocatorUtils.getByLocator(element), seconds);
     }
 
     protected boolean isPresent(By by) {
@@ -94,13 +94,6 @@ public class BasePage implements Page {
         select.selectByValue(text);
     }
 
-
-    protected void scrollDown(int pixel) {
-        executor.executeScript("window.scrollBy(0, " + pixel + ")");
-        sleepInMillis(Utils.getInteger("SCROLL_INTERVAL_DELAY"));
-    }
-
-
     protected void scrollAndClick(WebElement element) {
         try {
             element.click();
@@ -115,14 +108,19 @@ public class BasePage implements Page {
     }
 
     protected void scrollToElement(WebElement element) {
-        for (int i = 0; i < Utils.getInteger("SCROLL_COUNT_MAX"); i++) {
+        for (int i = 0; i < Utils.getInteger("SCROLL_COUNT"); i++) {
             try {
                 if (element.isDisplayed())
                     break;
             } catch (org.openqa.selenium.NoSuchElementException ignore) {
-                scrollDown(Utils.getInteger("SCROLL_BY_PIXEL"));
+                scrollDown(Utils.getInteger("SCROLL_PIXEL"));
             }
         }
+    }
+
+    protected void scrollDown(int pixel) {
+        executor.executeScript("window.scrollBy(0, " + pixel + ")");
+        sleepInMillis(Utils.getInteger("SCROLL_DELAY"));
     }
 
     protected void sleep(int seconds) {

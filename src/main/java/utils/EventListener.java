@@ -95,7 +95,7 @@ public class EventListener implements WebDriverEventListener {
 
     @Override
     public void beforeClickOn(WebElement element, WebDriver driver) {
-        locators.add(LocatorUtils.getBy(element));
+        locators.add(LocatorUtils.getByLocator(element));
     }
 
     @Override

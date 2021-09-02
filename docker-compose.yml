@@ -30,8 +30,3 @@ services:
     - hub
     environment:
       HUB_HOST: hub
-
-  phptravel:
-    image: phptravels_image
-    depends_on:
-    - hub

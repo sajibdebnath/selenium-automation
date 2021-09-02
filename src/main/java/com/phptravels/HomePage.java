@@ -40,8 +40,8 @@ public class HomePage extends BasePage {
     private List<WebElement> searchBtns;
     @FindBy(partialLinkText = "Details")
     private List<WebElement> detailsLink;
-    @FindBy(xpath = "//h2[contains(text(),'Search Tours in')]")
-    private WebElement tourSearchResults;
+    @FindBy(css = "img[src*='tour_loading.gif']")
+    private WebElement tourLoadingImg;
     @FindBy(css = "ul>li[data-b='']")
     private List<WebElement> tourLists;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
@@ -105,7 +105,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickTourDetailsLink(String name) {
-        waitForVisibility(tourSearchResults, 30);
+        waitForInvisibility(tourLoadingImg, 30);
         for (int i = 0; i < tourLists.size(); i++) {
             if (tourLists.get(i).getText().contains(name)) {
                 scrollAndClick(detailsLink.get(i));
