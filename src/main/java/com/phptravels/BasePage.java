@@ -55,11 +55,11 @@ public class BasePage implements Page {
     }
 
     protected boolean isPresent(WebElement element) {
-        return isPresent(LocatorUtils.getLocator(element), Utils.getInteger("IMPLICITLY_WAIT"));
+        return isPresent(LocatorUtils.getBy(element), Utils.getInteger("IMPLICITLY_WAIT"));
     }
 
     protected boolean isPresent(WebElement element, int seconds) {
-        return isPresent(LocatorUtils.getLocator(element), seconds);
+        return isPresent(LocatorUtils.getBy(element), seconds);
     }
 
     protected boolean isPresent(By by) {

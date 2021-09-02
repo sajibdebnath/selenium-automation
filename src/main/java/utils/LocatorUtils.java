@@ -9,41 +9,36 @@ import java.util.List;
 
 public class LocatorUtils {
     /**
-     * Get locator from web element
+     * Converting WebElement to By locator
      *
-     * @param element
-     * @return
+     * @param webElement
+     * @return By
      */
-    public static By getLocator(WebElement element) {
-        String[] type;
-        String str = element.toString();
-        type = element.toString().contains(" -> ") ?
-                StringUtils.removeEnd(str.split(" -> ")[1], "]").split(": ") :
-                StringUtils.removeEnd(str.split(" 'By")[1], "'").split(": ");
+    public static By getBy(WebElement webElement) {
+        String[] locator = webElement.toString().split("(?=id:\\s|name:\\s|tagName:\\s|xpath:\\s|" +
+                "className:\\s|selector:\\s|cssSelector:\\s|link text:\\s|linkText:\\s)");
+        String[] type = StringUtils.removeEnd(locator[1], "]").split(":\\s");
+
+        if (!type[0].equals("xpath"))
+            StringUtils.removeEnd(type[1], "'");
+
         switch (type[0]) {
             case "id":
-            case "By.id":
                 return By.id(type[1]);
             case "name":
-            case "By.name":
                 return By.name(type[1]);
-            case "css selector":
-            case "By.cssSelector":
-                return By.cssSelector(type[1]);
-            case "className":
-            case "By.className":
-                return By.className(type[1]);
             case "tagName":
-            case "By.tagName":
                 return By.tagName(type[1]);
+            case "className":
+                return By.className(type[1]);
+            case "selector":
+                System.out.println(type[0]);
+            case "cssSelector":
+                return By.cssSelector(type[1]);
+            case "linkText":
             case "link text":
-            case "By.linkText":
-                return By.linkText(type[1]);
-            case "partial link text":
-            case "By.partialLinkText":
                 return By.partialLinkText(type[1]);
             case "xpath":
-            case "By.xpath":
                 return By.xpath(type[1]);
             default:
                 return null;
@@ -51,7 +46,7 @@ public class LocatorUtils {
     }
 
     public static List<WebElement> getElements(WebDriver driver, WebElement element) {
-        return getElements(driver, LocatorUtils.getLocator(element));
+        return getElements(driver, LocatorUtils.getBy(element));
     }
 
     public static List<WebElement> getElements(WebDriver driver, By by) {
