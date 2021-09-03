@@ -15,15 +15,15 @@ public class LocatorUtils {
      * @return By
      */
     public static By getByLocator(WebElement webElement) {
-        String element = webElement.toString().split("(?=id:\\s|name:\\s|tagName:\\s|xpath:\\s|" +
-                "className:\\s|selector:\\s|cssSelector:\\s|link text:\\s|linkText:\\s)")[1];
+        String element = webElement.toString().split("(?=id:\\s|name:\\s|selector:\\s|link text:\\s|xpath:\\s|" +
+                "By.tagName:\\s|By.className:\\s|By.cssSelector:\\s|By.linkText:\\s|By.partialLinkText:\\s)")[1];
 
         String[] locator = StringUtils.removeEnd(element, "]").split(":\\s");
-        String selector = StringUtils.removeEnd(locator[1], "'");
         String method = locator[0];
         if (method.equals("xpath"))
             return By.xpath(locator[1]);
 
+        String selector = StringUtils.removeEnd(locator[1], "'");
         switch (method) {
             case "id":
                 return By.id(selector);
