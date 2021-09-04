@@ -55,6 +55,8 @@
 │   ├── chromedriver.exe
 │   ├── geckodriver
 │   └── geckodriver.exe
+├── screenshots
+│   └── bookingTicketAsGuestUserTest.png
 ├── src
 │   ├── main
 │   │   ├── java
