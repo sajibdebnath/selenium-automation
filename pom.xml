@@ -10,7 +10,7 @@
     <properties>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <suite.file>testng.xml</suite.file>
+        <test.suite>testng.xml</test.suite>
     </properties>
 
     <build>
@@ -29,7 +29,7 @@
                 <version>3.0.0-M4</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>${suite.file}</suiteXmlFile>
+                        <suiteXmlFile>${test.suite}</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
             </plugin>
