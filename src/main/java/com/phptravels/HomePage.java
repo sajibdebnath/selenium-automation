@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import utils.WindowHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class HomePage extends BasePage {
     private WebElement gotItBtn;
     @FindBy(id = "tours-tab")
     private WebElement tourTab;
+    @FindBy(xpath = "//span[contains(text(),'Search by City')]")
+    private WebElement searchCityText;
     @FindBy(xpath = "//select[@id='tours_city']/following-sibling::*")
     private WebElement searchByCity;
     @FindBy(xpath = "//input[@class='select2-search__field' and @type='search']")
@@ -42,6 +45,8 @@ public class HomePage extends BasePage {
     private List<WebElement> detailsLink;
     @FindBy(css = "img[src*='tour_loading.gif']")
     private WebElement tourLoadingImg;
+    @FindBy(className = "sec__title_list")
+    private WebElement searchTitle;
     @FindBy(css = "ul>li[data-b='']")
     private List<WebElement> tourLists;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
@@ -56,11 +61,13 @@ public class HomePage extends BasePage {
     public void cookieHandler() {
         if (isPresent(gotItBtn))
             gotItBtn.click();
+        new WindowHandler(driver).refreshPage();
         waitForInvisibility(gotItBtn);
     }
 
     public void clickToursTab() {
         tourTab.click();
+        waitForVisibility(searchCityText);
     }
 
     private void searchCity(String destination) {
@@ -106,6 +113,7 @@ public class HomePage extends BasePage {
 
     public void clickTourDetailsLink(String name) {
         waitForInvisibility(tourLoadingImg, 30);
+        waitForVisibility(searchTitle);
         for (int i = 0; i < tourLists.size(); i++) {
             if (tourLists.get(i).getText().contains(name)) {
                 scrollAndClick(detailsLink.get(i));

@@ -5,25 +5,23 @@
 - Open `config.properties` file from `/src/main/resources`
 - Update necessary property values
 ```properties
-    BASE_URL=https://www.phptravels.net
-    BROWSER=chrome
-    HEADLESS=false
-    
-    FLUENT_WAIT=5
-    POLLING_DELAY=100
-    IMPLICITLY_WAIT=0
-    SCREENSHOT_ON_FAILURE=true
-    
-    SCROLL_DELAY=10
-    SCROLL_COUNT=10
-    SCROLL_PIXEL=200
-    HUB_ADDRESS=hub:4444
+   BROWSER=chrome
+   HEADLESS=false
+   WAIT=0
+   FLUENT_WAIT=10
+   POLLING_DELAY=100
+   SCROLL_DELAY=10
+   SCROLL_COUNT=10
+   SCROLL_PIXEL=200
+   SCREENSHOT=true
+   BASE_URL=https://www.phptravels.net
+   HUB_ADDRESS=hub:4444
 ```
 ### Running Tests locally with selenium standalone server
 - Open terminal or cmd
 - Go to project root directory `cd ~/selenium-automation`
 - Run selenium standalone server `java -jar selenium-server-standalone-*.jar -port 4444`
-- On `/src/main/resources/config.properties` set `HUB_ADDRESS=localhost:4444`
+- On config file `/src/main/resources/config.properties` set `HUB_ADDRESS=localhost:4444`
 - Run tests suite with `mvn clean test -Dremote=true`
 ##### Example
 - Run all tests of a class `mvn clean test -Dremote=true -Dtest='LoginTest'`
@@ -34,7 +32,7 @@
 - Open docker app
 - Open terminal or cmd
 - Go to project root directory `cd ~/selenium-automation`
-- On `/src/main/resources/config.properties` set `HUB_ADDRESS=hub:4444`
+- On config file`/src/main/resources/config.properties` set `HUB_ADDRESS=hub:4444`
 - Set `TagName = "phptravels"`
 - Docker up `docker-compose -p ${TagName} up --remove-orphans -d`
 - Docker scale `docker-compose -p ${TagName} scale firefox=5 chrome=5`

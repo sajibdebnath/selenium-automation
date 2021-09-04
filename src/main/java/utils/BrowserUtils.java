@@ -31,7 +31,7 @@ public class BrowserUtils {
     public EventFiringWebDriver startDriver() {
         WebDriver webDriver = getWebDriver();
         driver = getEventFiringWebDriver(webDriver);
-        driver.manage().timeouts().implicitlyWait(Utils.getInteger("IMPLICITLY_WAIT"), TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Utils.getInteger("WAIT"), TimeUnit.SECONDS);
         driver.manage().window().maximize();
         return driver;
     }
@@ -137,7 +137,7 @@ public class BrowserUtils {
     public void getScreenShot(WebDriver driver, ITestResult result) {
         String screenshot = PathUtils.SCREENSHOT_FOLDER + result.getName() + ".png";
         System.setProperty("SCREENSHOT_NAME", screenshot);
-        if (ITestResult.FAILURE == result.getStatus() && Utils.getBoolean("SCREENSHOT_ON_FAILURE")) {
+        if (ITestResult.FAILURE == result.getStatus() || Utils.getBoolean("SCREENSHOT")) {
             File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             try {
                 FileUtils.copyFile(screenshotFile, new File(screenshot));

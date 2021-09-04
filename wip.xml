@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
+<suite name="Work In Progress">
     <test verbose="2" preserve-order="true" name="selenium-automation">
         <classes>
             <class name="test.BookingTest">
                 <methods>
                     <include name="bookingTicketAsGuestUserTest"/>
-                </methods>
-            </class>
-            <class name="test.LoginTest">
-                <methods>
-                    <include name="loginAndLogoutTest"/>
-                </methods>
-            </class>
-            <class name="test.SignUpTest">
-                <methods>
-                    <include name="signUpCustomerTest"/>
                 </methods>
             </class>
         </classes>

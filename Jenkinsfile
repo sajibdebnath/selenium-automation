@@ -1,12 +1,12 @@
 node('master') {
     def WORKSPACE = env.WORKSPACE
     def BUILD = env.BUILD_NUMBER
-    def SUITE_FILE = env.SUITE_FILE
-    def JOB_NAME = env.JOB_NAME.toLowerCase()
+    def BROWSER = env.BROWSER
+    def TEST_SUITE = env.TEST_SUITE
+    def JOB_NAME = "seleniumautomation${BUILD}"
 
-    def IMAGE = "${JOB_NAME}_${BUILD}_image"
-    def CONTAINER = "${JOB_NAME}_${BUILD}_container"
-    def LOCATION = "${WORKSPACE}/reports"
+    def IMAGE = "${JOB_NAME}_image"
+    def CONTAINER = "${JOB_NAME}_container"
 
     stage("Checkout Repository") {
         checkout scm
@@ -21,14 +21,16 @@ node('master') {
     }
 
     stage("Run Tests") {
-        def exitCode = sh script: "docker run -t --network ${JOB_NAME}_default --name ${CONTAINER} ${IMAGE} mvn clean test -Dremote=true -Dbuild.number=${BUILD} -Dtest.suite=${SUITE_FILE}", returnStatus: true
+        def exitCode = sh script: "docker run -t --network=${JOB_NAME}_default --name ${CONTAINER} ${IMAGE} mvn clean test " +
+                "-Dremote=true -Dbrowser=${BROWSER} -Dtest.suite=${TEST_SUITE} -q", returnStatus: true
         if (exitCode == 1)
             currentBuild.result = "UNSTABLE"
     }
 
     stage("Reports Generate") {
-        sh "mkdir ${LOCATION}"
-        sh "docker cp ${CONTAINER}:/app/target/surefire-reports/. ${LOCATION}"
+        sh "mkdir ${WORKSPACE}/reports"
+        sh "docker cp ${CONTAINER}:/app/screenshots/. ${WORKSPACE}/screenshots"
+        sh "docker cp ${CONTAINER}:/app/target/surefire-reports/. ${WORKSPACE}/reports"
     }
 
     stage("Reports Publish") {
@@ -36,10 +38,10 @@ node('master') {
                 allowMissing         : false,
                 alwaysLinkToLastBuild: true,
                 keepAll              : true,
-                reportDir            : "${LOCATION}/",
+                reportDir            : "${WORKSPACE}/reports",
                 reportFiles          : 'index.html',
-                reportName           : 'HTML Report',
-                reportTitles         : ''])
+                reportName           : 'HtmlReports',
+                reportTitles         : 'Php Travels'])
     }
 
     stage("Stop Selenium Grid Hub") {
@@ -50,5 +52,4 @@ node('master') {
         sh "docker rm  ${CONTAINER}"
         sh "docker rmi ${IMAGE} -f"
     }
-
 }

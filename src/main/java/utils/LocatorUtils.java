@@ -15,12 +15,12 @@ public class LocatorUtils {
      * @return By
      */
     public static By getByLocator(WebElement webElement) {
-        String element = webElement.toString().split("(?=id:\\s|name:\\s|selector:\\s|link text:\\s|xpath:\\s|" +
-                "By.tagName:\\s|By.className:\\s|By.cssSelector:\\s|By.linkText:\\s|By.partialLinkText:\\s)")[1];
+        String element = webElement.toString().split("(?=id:\\s|name:\\s|selector:\\s|link text:\\s|\\sxpath:\\s|" +
+                "By.xpath:\\s|By.tagName:\\s|By.className:\\s|By.cssSelector:\\s|By.linkText:\\s|By.partialLinkText:\\s)")[1];
 
         String[] locator = StringUtils.removeEnd(element, "]").split(":\\s");
         String method = locator[0];
-        if (method.equals("xpath"))
+        if (method.equals(" xpath"))
             return By.xpath(locator[1]);
 
         String selector = StringUtils.removeEnd(locator[1], "'");
@@ -39,6 +39,8 @@ public class LocatorUtils {
             case "linkText":
             case "link text":
                 return By.partialLinkText(selector);
+            case "By.xpath":
+                return By.name(selector);
             default:
                 return null;
         }

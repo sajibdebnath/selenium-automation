@@ -34,7 +34,9 @@ public class BasePage implements Page {
     }
 
     protected void waitForVisibility(WebElement element, int seconds) {
-        getFluentWait().withTimeout(Duration.ofSeconds(seconds))
+        getFluentWait()
+                .withMessage("Check for visibility: " + LocatorUtils.getByLocator(element))
+                .withTimeout(Duration.ofSeconds(seconds))
                 .ignoring(NoSuchElementException.class, NullPointerException.class)
                 .until(a -> element.isDisplayed());
     }
@@ -44,18 +46,20 @@ public class BasePage implements Page {
     }
 
     protected void waitForInvisibility(WebElement element, int seconds) {
-        getFluentWait().withTimeout(Duration.ofSeconds(seconds))
+        getFluentWait()
+                .withMessage("Check for invisibility: " + LocatorUtils.getByLocator(element))
+                .withTimeout(Duration.ofSeconds(seconds))
                 .until(a -> {
                     try {
                         return !element.isDisplayed();
-                    } catch (org.openqa.selenium.NoSuchElementException e) {
+                    } catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.StaleElementReferenceException e) {
                         return true;
                     }
                 });
     }
 
     protected boolean isPresent(WebElement element) {
-        return isPresent(LocatorUtils.getByLocator(element), Utils.getInteger("IMPLICITLY_WAIT"));
+        return isPresent(LocatorUtils.getByLocator(element), Utils.getInteger("WAIT"));
     }
 
     protected boolean isPresent(WebElement element, int seconds) {
@@ -63,14 +67,14 @@ public class BasePage implements Page {
     }
 
     protected boolean isPresent(By by) {
-        return isPresent(by, Utils.getInteger("IMPLICITLY_WAIT"));
+        return isPresent(by, Utils.getInteger("WAIT"));
     }
 
     protected boolean isPresent(By by, int seconds) {
         try {
             return getFluentWait().withTimeout(Duration.ofSeconds(seconds))
                     .until(a -> driver.findElements(by).size() > 0);
-        } catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
+        } catch (org.openqa.selenium.TimeoutException e) {
             return false;
         }
     }
@@ -94,6 +98,13 @@ public class BasePage implements Page {
         select.selectByValue(text);
     }
 
+
+    protected void scrollDown(int pixel) {
+        executor.executeScript("window.scrollBy(0, " + pixel + ")");
+        sleepInMillis(Utils.getInteger("SCROLL_DELAY"));
+    }
+
+
     protected void scrollAndClick(WebElement element) {
         try {
             element.click();
@@ -116,11 +127,6 @@ public class BasePage implements Page {
                 scrollDown(Utils.getInteger("SCROLL_PIXEL"));
             }
         }
-    }
-
-    protected void scrollDown(int pixel) {
-        executor.executeScript("window.scrollBy(0, " + pixel + ")");
-        sleepInMillis(Utils.getInteger("SCROLL_DELAY"));
     }
 
     protected void sleep(int seconds) {

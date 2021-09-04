@@ -37,6 +37,5 @@ public class BaseTest implements Test {
     @AfterMethod
     public void takeScreenShotOnFailure(ITestResult result) {
         browser.getScreenShot(driver, result);
-        new Utils().printEventLog();
     }
 }
