@@ -27,9 +27,7 @@ public class HomePage extends BasePage {
     private WebElement gotItBtn;
     @FindBy(id = "tours-tab")
     private WebElement tourTab;
-    @FindBy(xpath = "//span[contains(text(),'Search by City')]")
-    private WebElement searchCityText;
-    @FindBy(xpath = "//select[@id='tours_city']/following-sibling::*")
+    @FindBy(css = "[aria-labelledby='select2-tours_city-container']")
     private WebElement searchByCity;
     @FindBy(xpath = "//input[@class='select2-search__field' and @type='search']")
     private WebElement searchField;
@@ -67,13 +65,11 @@ public class HomePage extends BasePage {
 
     public void clickToursTab() {
         tourTab.click();
-        waitForVisibility(searchCityText);
     }
 
-    private void searchCity(String destination) {
+    private void searchCity(String city) {
         waitAndClick(searchByCity);
-        searchByText(destination);
-        clickSearchResults(destination);
+        searchByText(city);
     }
 
     private void setDate(String tourDate) {
@@ -104,8 +100,8 @@ public class HomePage extends BasePage {
         }
     }
 
-    public void searchTravelTour(String destination, String date, int adultNumber) {
-        searchCity(destination);
+    public void searchTravelTour(String city, String date, int adultNumber) {
+        searchCity(city);
         setDate(date);
         setAdultsNumber(adultNumber);
         clickSearchBtn();
@@ -141,9 +137,9 @@ public class HomePage extends BasePage {
     }
 
     void searchByText(String text) {
-        scrollAndClick(searchField);
         searchField.sendKeys(text);
         waitForInvisibility(searching);
+        sleep(2);
         clickSearchResults(text);
     }
 
