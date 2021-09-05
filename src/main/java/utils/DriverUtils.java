@@ -11,7 +11,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
-import org.testng.ITestResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,15 +21,16 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-public class BrowserUtils {
+public class DriverUtils {
     private EventFiringWebDriver driver;
 
     /**
      * Start webdriver
      */
-    public EventFiringWebDriver startDriver() {
-        WebDriver webDriver = getWebDriver();
-        driver = getEventFiringWebDriver(webDriver);
+    public WebDriver startDriver(String browser, boolean remote) {
+        WebDriver webDriver = getWebDriver(browser, remote);
+        driver = new EventFiringWebDriver(webDriver);
+        driver.register(new EventListener());
         driver.manage().timeouts().implicitlyWait(Utils.getInteger("WAIT"), TimeUnit.SECONDS);
         driver.manage().window().maximize();
         return driver;
@@ -46,35 +46,17 @@ public class BrowserUtils {
     /**
      * Instantiate webdriver
      */
-    private WebDriver getWebDriver() {
-        String browser = Utils.getString("BROWSER");
-        String remoteUrl = String.format("http://%s/wd/hub", Utils.getString("HUB_ADDRESS"));
-        boolean remote = System.getProperty("remote") != null && System.getProperty("remote").equals("true");
-        if (remote) {
-            try {
-                switch (browser) {
-                    case "chrome":
-                        return new RemoteWebDriver(new URL(remoteUrl), getChromeOptions());
-                    case "firefox":
-                        return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOptions());
-                    default:
-                        System.out.println("[" + browser + "] is not a correct browser name.");
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-            switch (browser) {
-                case "chrome":
-                    return getChromeDriver();
-                case "firefox":
-                    return getFirefoxDriver();
-                default:
-                    System.out.println("[" + browser + "] is not a correct browser name.");
-            }
+    private WebDriver getWebDriver(String browser, boolean remote) {
+        switch (browser) {
+            case "chrome":
+                return remote ? getRemoteWebDriver(browser) : getChromeDriver();
+            case "firefox":
+                return remote ? getRemoteWebDriver(browser) : getFirefoxDriver();
+            default:
+                System.out.println("=======Error! [" + browser + "] Error!=======");
+                System.out.println("=======Start with default(chrome) browser======");
+                return getChromeDriver();
         }
-        return null;
     }
 
     /**
@@ -83,7 +65,7 @@ public class BrowserUtils {
     private ChromeDriver getChromeDriver() {
         java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
         System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, PathUtils.CHROME_DRIVER_PATH);
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, Utils.CHROME_DRIVER_PATH);
         return new ChromeDriver(getChromeOptions());
     }
 
@@ -92,17 +74,24 @@ public class BrowserUtils {
      */
     private FirefoxDriver getFirefoxDriver() {
         java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        System.setProperty("webdriver.gecko.driver", PathUtils.FIREFOX_DRIVER_PATH);
+        System.setProperty("webdriver.gecko.driver", Utils.FIREFOX_DRIVER_PATH);
         System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
         return new FirefoxDriver(getFirefoxOptions());
     }
 
-    /**
-     * get event firing webdriver
-     */
-    private EventFiringWebDriver getEventFiringWebDriver(WebDriver webDriver) {
-        driver = new EventFiringWebDriver(webDriver);
-        return driver.register(new EventListener());
+    private RemoteWebDriver getRemoteWebDriver(String browser) {
+        String remoteUrl = String.format("http://%s/wd/hub", Utils.getString("HUB_ADDRESS"));
+        try {
+            switch (browser) {
+                case "chrome":
+                    return new RemoteWebDriver(new URL(remoteUrl), getChromeOptions());
+                case "firefox":
+                    return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOptions());
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -134,16 +123,14 @@ public class BrowserUtils {
     /**
      * Take screenshot if test got fail
      */
-    public void getScreenShot(WebDriver driver, ITestResult result) {
-        String screenshot = PathUtils.SCREENSHOT_FOLDER + result.getName() + ".png";
+    public void getScreenShot(WebDriver driver, String screenshotName) {
+        String screenshot = Utils.SCREENSHOT_FOLDER + screenshotName + ".png";
         System.setProperty("SCREENSHOT_NAME", screenshot);
-        if (ITestResult.FAILURE == result.getStatus() || Utils.getBoolean("SCREENSHOT")) {
-            File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            try {
-                FileUtils.copyFile(screenshotFile, new File(screenshot));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(screenshotFile, new File(screenshot));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

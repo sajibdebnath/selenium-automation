@@ -1,11 +1,14 @@
 package utils;
 
-import org.openqa.selenium.By;
-
 import java.util.ResourceBundle;
 
 public class Utils {
     private static ResourceBundle bundle = ResourceBundle.getBundle("config");
+    private static final String USER_DIR = System.getProperty("user.dir");
+    static final String SCREENSHOT_FOLDER = USER_DIR + "/screenshots/";
+    private static final boolean OS_WINDOWS = System.getProperty("os.name").contains("Windows");
+    static final String CHROME_DRIVER_PATH = USER_DIR + "/driver/" + (OS_WINDOWS ? "chromedriver.exe" : "chromedriver");
+    static final String FIREFOX_DRIVER_PATH = USER_DIR + "/driver/" + (OS_WINDOWS ? "geckodriver.exe" : "geckodriver");
 
     /**
      * Read text from config.properties
@@ -38,100 +41,13 @@ public class Utils {
     }
 
     /**
-     * Print all event logs
-     */
-    public void printEventLog() {
-        if (EventListener.eventListener.size() > 0) {
-            int i = 1;
-            System.out.println("Event Logs:");
-            for (String event : EventListener.eventListener)
-                System.out.println(String.format("%d. %s", i++, event));
-            System.out.println();
-            EventListener.eventListener.clear();
-        }
-    }
-
-    /**
      * All element locators
      */
-    public void printLocators() {
-        if (EventListener.locators.size() > 0) {
-            int i = 1;
-            System.out.println("Element locators:");
-            for (By by : EventListener.locators)
-                System.out.println(String.format("%d. %s", i++, by));
-            System.out.println();
-            EventListener.locators.clear();
-        }
-    }
-
-    /**
-     * All navigator links
-     */
-    public void printNavigatorsLink() {
-        if (EventListener.navigatesLink.size() > 0) {
-            int i = 1;
-            System.out.println("Navigating page urls:");
-            for (String link : EventListener.navigatesLink)
-                System.out.println(String.format("%d. %s", i++, link));
-            System.out.println();
-            EventListener.navigatesLink.clear();
-        }
-    }
-
-    /**
-     * All pages title
-     */
-    public void printPagesTitle() {
-        if (EventListener.pagesTitle.size() > 0) {
-            int i = 1;
-            System.out.println("Page titles:");
-            for (String title : EventListener.pagesTitle)
-                System.out.println(String.format("%d. %s", i++, title));
-            System.out.println();
-            EventListener.pagesTitle.clear();
-        }
-    }
-
-    /**
-     * All windows name that are switching
-     */
-    public void printWindowsName() {
-        if (EventListener.switchWindowsName.size() > 0) {
-            int i = 1;
-            System.out.println("Window names:");
-            for (String window : EventListener.switchWindowsName)
-                System.out.println(String.format("%d. %s", i++, window));
-            System.out.println();
-            EventListener.switchWindowsName.clear();
-        }
-    }
-
-    /**
-     * All elements visible text
-     */
-    public void printElementsText() {
-        if (EventListener.elementsText.size() > 0) {
-            int i = 1;
-            System.out.println("Elements visible text:");
-            for (String text : EventListener.elementsText)
-                System.out.println(String.format("%d. %s", i++, text));
-            System.out.println();
-            EventListener.elementsText.clear();
-        }
-    }
-
-    /**
-     * All screenshots name
-     */
-    public void printScreenShots() {
-        if (EventListener.screenshotsName.size() > 0) {
-            int i = 1;
-            System.out.println("Screenshots of failure test:");
-            for (String screenshot : EventListener.screenshotsName)
-                System.out.println(String.format("%d. %s", i++, screenshot));
-            System.out.println();
-            EventListener.screenshotsName.clear();
-        }
+    public static void printAvailableLocators() {
+        int i = 1;
+        System.out.println(EventListener.locators.size() > 0 ? "Available locators:" : "No locators");
+        for (String locator : EventListener.locators)
+            System.out.println(String.format("%d. %s", i++, locator));
+        EventListener.locators.clear();
     }
 }

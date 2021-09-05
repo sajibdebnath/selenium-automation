@@ -6,19 +6,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 public class EventListener implements WebDriverEventListener {
-    static Set<By> locators = new LinkedHashSet<>();
-    static List<String> navigatesLink = new ArrayList<>();
-    static List<String> pagesTitle = new ArrayList<>();
-    static List<String> elementsText = new ArrayList<>();
-    static List<String> switchWindowsName = new ArrayList<>();
-    static List<String> screenshotsName = new ArrayList<>();
-    static Set<String> eventListener = new LinkedHashSet<>();
+    static Set<String> locators = new LinkedHashSet<>();
 
     @Override
     public void beforeAlertAccept(WebDriver driver) {
@@ -42,14 +34,12 @@ public class EventListener implements WebDriverEventListener {
 
     @Override
     public void beforeNavigateTo(String url, WebDriver driver) {
-        navigatesLink.add(url);
-        eventListener.add(url);
+
     }
 
     @Override
     public void afterNavigateTo(String url, WebDriver driver) {
-        pagesTitle.add(url);
-        eventListener.add(url);
+
     }
 
     @Override
@@ -84,8 +74,7 @@ public class EventListener implements WebDriverEventListener {
 
     @Override
     public void beforeFindBy(By by, WebElement element, WebDriver driver) {
-        locators.add(by);
-        eventListener.add(by.toString());
+        locators.add(by.toString());
     }
 
     @Override
@@ -95,7 +84,7 @@ public class EventListener implements WebDriverEventListener {
 
     @Override
     public void beforeClickOn(WebElement element, WebDriver driver) {
-        locators.add(LocatorUtils.getByLocator(element));
+        locators.add(LocatorUtils.getByLocator(element).toString());
     }
 
     @Override
@@ -125,8 +114,7 @@ public class EventListener implements WebDriverEventListener {
 
     @Override
     public void beforeSwitchToWindow(String windowName, WebDriver driver) {
-        switchWindowsName.add(windowName);
-        eventListener.add(windowName);
+
     }
 
     @Override
@@ -146,8 +134,7 @@ public class EventListener implements WebDriverEventListener {
 
     @Override
     public <X> void afterGetScreenshotAs(OutputType<X> target, X screenshot) {
-        screenshotsName.add(System.getProperty("SCREENSHOT_NAME"));
-        eventListener.add(System.getProperty("SCREENSHOT_NAME"));
+        locators.add(System.getProperty("SCREENSHOT_NAME"));
 
     }
 
@@ -158,6 +145,6 @@ public class EventListener implements WebDriverEventListener {
 
     @Override
     public void afterGetText(WebElement element, WebDriver driver, String text) {
-        elementsText.add(text);
+
     }
 }
