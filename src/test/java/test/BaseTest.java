@@ -8,7 +8,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import utils.DriverUtils;
-import utils.Utils;
+import utils.LocatorUtils;
+import utils.BundleUtils;
 
 import java.lang.reflect.Method;
 
@@ -21,7 +22,7 @@ public class BaseTest implements Test {
     public void openBrowser() {
         boolean remote = System.getProperty("remote") != null && System.getProperty("remote").equals("true");
         String browser = System.getProperty("browser") == null ?
-                Utils.getString("BROWSER") : System.getProperty("browser");
+                BundleUtils.getString("BROWSER") : System.getProperty("browser");
         driver = driverUtils.startDriver(browser, remote);
     }
 
@@ -32,17 +33,17 @@ public class BaseTest implements Test {
 
     @BeforeMethod
     public void navigateToHomePage(Method method) {
-        driver.get(Utils.getString("BASE_URL"));
+        driver.get(BundleUtils.getString("BASE_URL"));
         homePage = new HomePage(driver);
         homePage.cookieHandler();
     }
 
     @AfterMethod
     public void takeScreenShotOnFailure(ITestResult result) {
-        if (ITestResult.FAILURE == result.getStatus() || Utils.getBoolean("PASS_SCREENSHOT"))
+        if (ITestResult.FAILURE == result.getStatus() || BundleUtils.getBoolean("PASS_SCREENSHOT"))
             driverUtils.getScreenShot(driver, result.getName());
 
-        if (Utils.getBoolean("DEBUG_LOG"))
-            Utils.printAvailableLocators();
+        if (BundleUtils.getBoolean("DEBUG_LOG"))
+            LocatorUtils.printAvailableLocators();
     }
 }

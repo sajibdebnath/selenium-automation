@@ -4,8 +4,8 @@ import com.phptravels.DashboardPage;
 import com.phptravels.LoginPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import testdata.SiteData;
-import testdata.UserData;
+import testdata.Site;
+import testdata.User;
 
 public class LoginTest extends BaseTest {
     private LoginPage login;
@@ -14,14 +14,14 @@ public class LoginTest extends BaseTest {
     @Test
     public void loginAndLogoutTest() {
         login = homePage.clickLoginLink();
-        login.fillUserCredential(UserData.EMAIL, UserData.PASSWORD);
+        login.setUserCredential(User.EMAIL, User.PASSWORD);
         dashboard = login.clickLogInBtn();
 
-        Assert.assertEquals(dashboard.getAuthorTitle(), UserData.USERNAME);
-        Assert.assertEquals(driver.getTitle(), SiteData.DASHBOARD_PAGE_TITLE);
+        Assert.assertEquals(dashboard.getAuthorTitle(), User.USERNAME);
+        Assert.assertEquals(driver.getTitle(), Site.DASHBOARD_TITLE);
 
         dashboard.clickLogout();
-        Assert.assertTrue(login.signupBtnDisplayed());
-        Assert.assertEquals(driver.getTitle(), SiteData.LOGIN_PAGE_TITLE);
+        Assert.assertTrue(login.linkDisplayed());
+        Assert.assertEquals(driver.getTitle(), Site.LOGIN_TITLE);
     }
 }

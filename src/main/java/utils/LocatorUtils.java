@@ -15,33 +15,42 @@ public class LocatorUtils {
      * @return By
      */
     public static By getByLocator(WebElement webElement) {
-        String element = webElement.toString().split("(?=id:\\s|name:\\s|selector:\\s|link text:\\s|\\sxpath:\\s|" +
-                "By.xpath:\\s|By.tagName:\\s|By.className:\\s|By.cssSelector:\\s|By.linkText:\\s|By.partialLinkText:\\s)")[1];
+        String element = webElement.toString().split(
+                "(?=\\sid:\\s|\\sname:\\s|\\sselector:\\s|\\slink text:|\\spartial link text:\\s|\\sxpath:\\s|" +
+                        "By.id:\\s|By.name:\\s|By.tagName:\\s|By.className:\\s|By.cssSelector:\\s|" +
+                        "By.linkText:\\s|By.partialLinkText:\\s|By.xpath:\\s)")[1];
 
         String[] locator = StringUtils.removeEnd(element, "]").split(":\\s");
-        String method = locator[0];
-        if (method.equals(" xpath"))
+        String method = locator[0].trim();
+        System.out.println(method);
+        if (method.equals("xpath"))
             return By.xpath(locator[1]);
 
         String selector = StringUtils.removeEnd(locator[1], "'");
         switch (method) {
             case "id":
+            case "By.id":
                 return By.id(selector);
             case "name":
+            case "By.name":
                 return By.name(selector);
-            case "tagName":
+            case "By.tagName":
                 return By.tagName(selector);
-            case "className":
+            case "By.className":
                 return By.className(selector);
             case "selector":
-            case "cssSelector":
+            case "By.cssSelector":
                 return By.cssSelector(selector);
-            case "linkText":
             case "link text":
+            case "By.linkText":
+                return By.linkText(selector);
+            case "partial link text":
+            case "By.partialLinkText":
                 return By.partialLinkText(selector);
             case "By.xpath":
                 return By.name(selector);
             default:
+                System.out.println("Error! [" + method + "]");
                 return null;
         }
     }
@@ -54,11 +63,30 @@ public class LocatorUtils {
         return driver.findElements(by);
     }
 
-    public static List<WebElement> getElementsWithText(WebDriver driver, String text) {
-        return driver.findElements(By.xpath("//*[contains(text(),'" + text + "')]"));
+    public static WebElement getElementByText(WebDriver driver, String text) {
+        return getElementByText(driver, text, 0);
     }
 
-    public static List<WebElement> getElementsWithExactText(WebDriver driver, String text) {
-        return driver.findElements(By.xpath("//*[text()='" + text + "']"));
+    public static WebElement getElementByText(WebDriver driver, String text, int index) {
+        return driver.findElements(By.xpath("//*[contains(text(),'" + text + "')]")).get(index);
+    }
+
+    public static WebElement getElementByExactText(WebDriver driver, String text) {
+        return getElementByExactText(driver, text, 0);
+    }
+
+    public static WebElement getElementByExactText(WebDriver driver, String text, int index) {
+        return driver.findElements(By.xpath("//*[text()='" + text + "']")).get(index);
+    }
+
+    /**
+     * All element locators
+     */
+    public static void printAvailableLocators() {
+        int i = 1;
+        System.out.println(EventListener.locators.size() > 0 ? "Available locators:" : "No locators");
+        for (String locator : EventListener.locators)
+            System.out.println(String.format("%d. %s", i++, locator));
+        EventListener.locators.clear();
     }
 }

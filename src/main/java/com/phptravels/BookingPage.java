@@ -10,7 +10,7 @@ import java.util.List;
 
 import static utils.LocatorUtils.getElements;
 
-public class BookingDetailsPage extends HomePage {
+public class BookingPage extends HomePage {
     @FindBy(name = "firstname")
     private WebElement firstName;
     @FindBy(name = "lastname")
@@ -42,28 +42,28 @@ public class BookingDetailsPage extends HomePage {
     @FindBy(id = "booking")
     private WebElement bookingConfirmBtn;
 
-    public BookingDetailsPage(WebDriver driver) {
+    public BookingPage(WebDriver driver) {
         super(driver);
     }
 
     private void setFirstName(String fName) {
-        setValue(firstName, fName);
+        setText(firstName, fName);
     }
 
     private void setLastName(String lName) {
-        setValue(lastName, lName);
+        setText(lastName, lName);
     }
 
     private void setEmail(String email_addrs) {
-        setValue(email, email_addrs);
+        setText(email, email_addrs);
     }
 
     private void setPhoneNumber(String number) {
-        setValue(phoneNumber, number);
+        setText(phoneNumber, number);
     }
 
     private void setAddress(String address_name) {
-        setValue(address, address_name);
+        setText(address, address_name);
     }
 
     private void setCountryName(String country) {
@@ -82,11 +82,11 @@ public class BookingDetailsPage extends HomePage {
     }
 
     private void setTravellerFirstName(String tFirstName) {
-        setValue(travellerFirstName, tFirstName);
+        setText(travellerFirstName, tFirstName);
     }
 
     private void setTravellerLastName(String tLastName) {
-        setValue(travellerLastName, tLastName);
+        setText(travellerLastName, tLastName);
     }
 
     private void setTraveller2Title(String title) {
@@ -95,11 +95,11 @@ public class BookingDetailsPage extends HomePage {
     }
 
     private void setTraveller2FirstName(String tFirstName) {
-        setValue(traveller2FirstName, tFirstName);
+        setText(traveller2FirstName, tFirstName);
     }
 
     private void setTraveller2LastName(String tLastName) {
-        setValue(traveller2LastName, tLastName);
+        setText(traveller2LastName, tLastName);
     }
 
     private void selectTitle(String title) {
@@ -112,7 +112,7 @@ public class BookingDetailsPage extends HomePage {
         }
     }
 
-    public void fillCustomerDetailsInfo(
+    public void fillCustomerDetails(
             String firstName, String lastName,
             String email, String phone, String addrs,
             String country, String nationality) {
@@ -125,19 +125,19 @@ public class BookingDetailsPage extends HomePage {
         setNationalityName(nationality);
     }
 
-    public void fillTraveller_1_Info(String title, String fName, String lName) {
+    public void fillTraveller1(String title, String fName, String lName) {
         setTravellerTitle(title);
         setTravellerFirstName(fName);
         setTravellerLastName(lName);
     }
 
-    public void fillTraveller_2_Info(String title, String fName, String lName) {
+    public void fillTraveller2(String title, String fName, String lName) {
         setTraveller2Title(title);
         setTraveller2FirstName(fName);
         setTraveller2LastName(lName);
     }
 
-    public void clickPayLater() {
+    public void selectPayment() {
         scrollAndClick(paylater);
     }
 
@@ -146,7 +146,7 @@ public class BookingDetailsPage extends HomePage {
             scrollAndClick(agreeCheckMark);
     }
 
-    public void clickBookingConfirm() {
+    public void confirmBooking() {
         scrollAndClick(bookingConfirmBtn);
         sleep(5);   // Waiting for new page loaded and return to main window
         new WindowHandler(driver).switchToTab(1);

@@ -100,14 +100,14 @@ public class HomePage extends BasePage {
         }
     }
 
-    public void searchTravelTour(String city, String date, int adultNumber) {
+    public void searchTourCity(String city, String date, int adultNumber) {
         searchCity(city);
         setDate(date);
         setAdultsNumber(adultNumber);
         clickSearchBtn();
     }
 
-    public void clickTourDetailsLink(String name) {
+    public void selectTour(String name) {
         waitForInvisibility(tourLoadingImg, 30);
         waitForVisibility(searchTitle);
         for (int i = 0; i < tourLists.size(); i++) {
@@ -130,10 +130,10 @@ public class HomePage extends BasePage {
         return new LoginPage(driver);
     }
 
-    public BookingDetailsPage clickBookNowBtn() {
+    public BookingPage bookingTour() {
         waitForVisibility(bookNowBtn);
         scrollAndClick(bookNowBtn);
-        return new BookingDetailsPage(driver);
+        return new BookingPage(driver);
     }
 
     void searchByText(String text) {
@@ -152,7 +152,7 @@ public class HomePage extends BasePage {
         }
     }
 
-    public boolean signupBtnDisplayed() {
+    public boolean linkDisplayed() {
         return signUpLink.isDisplayed();
     }
 

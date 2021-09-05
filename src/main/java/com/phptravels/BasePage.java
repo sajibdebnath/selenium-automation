@@ -5,9 +5,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import utils.LocatorUtils;
-import utils.Utils;
+import utils.BundleUtils;
 
 import java.time.Duration;
+import java.util.List;
 
 public class BasePage implements Page {
     protected WebDriver driver;
@@ -30,24 +31,24 @@ public class BasePage implements Page {
     }
 
     protected void waitForVisibility(WebElement element) {
-        waitForVisibility(element, Utils.getInteger("FLUENT_WAIT"));
+        waitForVisibility(element, BundleUtils.getInteger("FLUENT_WAIT"));
     }
 
     protected void waitForVisibility(WebElement element, int seconds) {
         getFluentWait()
-                .withMessage("Check for visibility: " + LocatorUtils.getByLocator(element))
+                .withMessage("Element did not visible: " + LocatorUtils.getByLocator(element))
                 .withTimeout(Duration.ofSeconds(seconds))
                 .ignoring(NoSuchElementException.class, NullPointerException.class)
                 .until(a -> element.isDisplayed());
     }
 
     protected void waitForInvisibility(WebElement element) {
-        waitForInvisibility(element, Utils.getInteger("FLUENT_WAIT"));
+        waitForInvisibility(element, BundleUtils.getInteger("FLUENT_WAIT"));
     }
 
     protected void waitForInvisibility(WebElement element, int seconds) {
         getFluentWait()
-                .withMessage("Check for invisibility: " + LocatorUtils.getByLocator(element))
+                .withMessage("Element still visible: " + LocatorUtils.getByLocator(element))
                 .withTimeout(Duration.ofSeconds(seconds))
                 .until(a -> {
                     try {
@@ -58,8 +59,20 @@ public class BasePage implements Page {
                 });
     }
 
+    protected void waitForListToLoad(List<WebElement> list) {
+        waitForListToLoad(list, BundleUtils.getInteger("FLUENT_WAIT"));
+    }
+
+    protected void waitForListToLoad(List<WebElement> list, int seconds) {
+        getFluentWait()
+                .withMessage("List items did not load")
+                .withTimeout(Duration.ofSeconds(seconds))
+                .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
+                .until(a -> list.size() > 0);
+    }
+
     protected boolean isPresent(WebElement element) {
-        return isPresent(LocatorUtils.getByLocator(element), Utils.getInteger("WAIT"));
+        return isPresent(LocatorUtils.getByLocator(element), BundleUtils.getInteger("WAIT"));
     }
 
     protected boolean isPresent(WebElement element, int seconds) {
@@ -67,25 +80,28 @@ public class BasePage implements Page {
     }
 
     protected boolean isPresent(By by) {
-        return isPresent(by, Utils.getInteger("WAIT"));
+        return isPresent(by, BundleUtils.getInteger("WAIT"));
     }
 
     protected boolean isPresent(By by, int seconds) {
         try {
-            return getFluentWait().withTimeout(Duration.ofSeconds(seconds))
+            return getFluentWait()
+                    .withMessage("Element did not present: " + by.toString())
+                    .withTimeout(Duration.ofSeconds(seconds))
+                    .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
                     .until(a -> driver.findElements(by).size() > 0);
         } catch (org.openqa.selenium.TimeoutException e) {
             return false;
         }
     }
 
-    protected void setValue(WebElement element, int value) {
-        setValue(element, Integer.toString(value));
+    protected void setValue(WebElement element, int keys) {
+        setText(element, Integer.toString(keys));
     }
 
-    protected void setValue(WebElement element, String text) {
+    protected void setText(WebElement element, String keys) {
         element.clear();
-        element.sendKeys(text);
+        element.sendKeys(keys);
     }
 
     protected void selectByVisibleText(WebElement element, String text) {
@@ -101,7 +117,7 @@ public class BasePage implements Page {
 
     protected void scrollDown(int pixel) {
         executor.executeScript("window.scrollBy(0, " + pixel + ")");
-        sleepInMillis(Utils.getInteger("SCROLL_DELAY"));
+        sleepInMillis(BundleUtils.getInteger("SCROLL_DELAY"));
     }
 
 
@@ -119,12 +135,12 @@ public class BasePage implements Page {
     }
 
     protected void scrollToElement(WebElement element) {
-        for (int i = 0; i < Utils.getInteger("SCROLL_COUNT"); i++) {
+        for (int i = 0; i < BundleUtils.getInteger("SCROLL_COUNT"); i++) {
             try {
                 if (element.isDisplayed())
                     break;
             } catch (org.openqa.selenium.NoSuchElementException ignore) {
-                scrollDown(Utils.getInteger("SCROLL_PIXEL"));
+                scrollDown(BundleUtils.getInteger("SCROLL_PIXEL"));
             }
         }
     }
@@ -146,7 +162,7 @@ public class BasePage implements Page {
      */
     private FluentWait<String> getFluentWait() {
         return new FluentWait<>("")
-                .withTimeout(Duration.ofSeconds(Utils.getInteger("FLUENT_WAIT")))
-                .pollingEvery(Duration.ofMillis(Utils.getInteger("POLLING_DELAY")));
+                .withTimeout(Duration.ofSeconds(BundleUtils.getInteger("FLUENT_WAIT")))
+                .pollingEvery(Duration.ofMillis(BundleUtils.getInteger("POLLING_DELAY")));
     }
 }

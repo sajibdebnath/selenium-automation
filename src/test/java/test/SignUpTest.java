@@ -4,8 +4,8 @@ import com.phptravels.LoginPage;
 import com.phptravels.SignUpPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import testdata.SignupData;
-import testdata.SiteData;
+import testdata.Customer;
+import testdata.Site;
 
 public class SignUpTest extends BaseTest {
     private SignUpPage signUp;
@@ -14,13 +14,13 @@ public class SignUpTest extends BaseTest {
     @Test
     public void signUpCustomerTest() {
         signUp = homePage.clickSignUpLink();
-        signUp.fillCustomerInfo(SignupData.FIRST_NAME,
-                SignupData.LAST_NAME, SignupData.PHONE_NUMBER,
-                SignupData.EMAIL, SignupData.PASSWORD,
-                SignupData.ACCOUNT_TYPE);
+        signUp.fillCustomerInfo(Customer.FNAME,
+                Customer.LNAME, Customer.PHONE,
+                Customer.EMAIL, Customer.PASSWORD,
+                Customer.TYPE);
         login = signUp.clickSignUpBtn();
 
-        Assert.assertEquals(login.successAlertMessage(), SiteData.SUCCESSFUL_SIGNUP_ALERT_MESSAGE);
-        Assert.assertEquals(driver.getTitle(), SiteData.LOGIN_PAGE_TITLE);
+        Assert.assertEquals(login.successAlertMessage(), Site.SIGNUP_ALERT);
+        Assert.assertEquals(driver.getTitle(), Site.LOGIN_TITLE);
     }
 }

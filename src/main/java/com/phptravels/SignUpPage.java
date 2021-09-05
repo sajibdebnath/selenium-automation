@@ -29,31 +29,32 @@ public class SignUpPage extends HomePage {
     }
 
     private void setFirstName(String fName) {
-        setValue(firstName, fName);
+        setText(firstName, fName);
     }
 
     private void setLastName(String lName) {
-        setValue(lastName, lName);
+        setText(lastName, lName);
     }
 
     private void setPhoneNumber(String number) {
-        setValue(phoneNumber, number);
+        setText(phoneNumber, number);
     }
 
     private void selectAccountType(String type) {
+        waitForListToLoad(typeOption);
         scrollAndClick(typeOption.get(5));
         clickSearchResults(type);
     }
 
     void setEmail(String email_addrs) {
-        setValue(email, email_addrs);
+        setText(email, email_addrs);
     }
 
     void setPassword(String pass) {
-        setValue(password, pass);
+        setText(password, pass);
     }
 
-    public void fillUserCredential(String email, String pass) {
+    public void setUserCredential(String email, String pass) {
         setEmail(email);
         setPassword(pass);
     }
