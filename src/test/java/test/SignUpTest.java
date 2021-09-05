@@ -14,7 +14,7 @@ public class SignUpTest extends BaseTest {
     @Test
     public void signUpCustomerTest() {
         signUp = homePage.clickSignUpLink();
-        signUp.fillCustomerInfo(Customer.FNAME,
+        signUp.setCustomerDetails(Customer.FNAME,
                 Customer.LNAME, Customer.PHONE,
                 Customer.EMAIL, Customer.PASSWORD,
                 Customer.TYPE);

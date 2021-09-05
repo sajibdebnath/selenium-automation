@@ -21,7 +21,7 @@ public class LoginTest extends BaseTest {
         Assert.assertEquals(driver.getTitle(), Site.DASHBOARD_TITLE);
 
         dashboard.clickLogout();
-        Assert.assertTrue(login.linkDisplayed());
+        Assert.assertTrue(login.SingUplinkPresent());
         Assert.assertEquals(driver.getTitle(), Site.LOGIN_TITLE);
     }
 }

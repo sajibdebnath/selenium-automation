@@ -22,7 +22,6 @@ public class LocatorUtils {
 
         String[] locator = StringUtils.removeEnd(element, "]").split(":\\s");
         String method = locator[0].trim();
-        System.out.println(method);
         if (method.equals("xpath"))
             return By.xpath(locator[1]);
 

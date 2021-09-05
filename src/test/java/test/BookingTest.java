@@ -15,11 +15,11 @@ public class BookingTest extends BaseTest {
         homePage.searchTourCity(Tour.CITY, Tour.DATE, Tour.ADULTS);
         homePage.selectTour(Tour.TITLE);
         detailsPage = homePage.bookingTour();
-        detailsPage.fillCustomerDetails(
+        detailsPage.setCustomerDetails(
                 Customer.FNAME, Customer.LNAME, Customer.EMAIL, Customer.PHONE,
                 Customer.ADDRESS, Customer.COUNTRY, Customer.NATIONALITY);
-        detailsPage.fillTraveller1(Customer.TITLE_1, Customer.TRAVELLER1_FNAME, Customer.TRAVELLER1_LNAME);
-        detailsPage.fillTraveller2(Customer.TITLE_2, Customer.TRAVELLER2_FNAME, Customer.TRAVELLER2_LNAME);
+        detailsPage.fillTraveller_1(Customer.TITLE_1, Customer.TRAVELLER1_FNAME, Customer.TRAVELLER1_LNAME);
+        detailsPage.fillTraveller_2(Customer.TITLE_2, Customer.TRAVELLER2_FNAME, Customer.TRAVELLER2_LNAME);
         detailsPage.selectPayment();
         detailsPage.clickAgreeBtn();
         detailsPage.confirmBooking();

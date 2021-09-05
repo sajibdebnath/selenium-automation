@@ -24,17 +24,17 @@ public class BookingPage extends HomePage {
     @FindBy(xpath = "//div[@class='input-items w-auto']")
     private List<WebElement> dropdownOption;
     @FindBy(name = "title_1")
-    private WebElement travellerTitle;
+    private WebElement traveller1_title;
     @FindBy(name = "firstname_1")
-    private WebElement travellerFirstName;
+    private WebElement traveller1_fName;
     @FindBy(name = "lastname_1")
-    private WebElement travellerLastName;
+    private WebElement traveller1_lName;
     @FindBy(name = "title_2")
-    private WebElement traveller2Title;
+    private WebElement traveller2_title;
     @FindBy(name = "firstname_2")
-    private WebElement traveller2FirstName;
+    private WebElement traveller2_fName;
     @FindBy(name = "lastname_2")
-    private WebElement traveller2LastName;
+    private WebElement traveller2_lName;
     @FindBy(id = "gateway_pay-later")
     private WebElement paylater;
     @FindBy(id = "agreechb")
@@ -58,7 +58,7 @@ public class BookingPage extends HomePage {
         setText(email, email_addrs);
     }
 
-    private void setPhoneNumber(String number) {
+    private void setPhone(String number) {
         setText(phoneNumber, number);
     }
 
@@ -66,40 +66,14 @@ public class BookingPage extends HomePage {
         setText(address, address_name);
     }
 
-    private void setCountryName(String country) {
+    private void setCountry(String country) {
         scrollAndClick(dropdownOption.get(0));
         searchByText(country);
     }
 
-    private void setNationalityName(String nationality) {
+    private void setNationality(String nationality) {
         dropdownOption.get(1).click();
         searchByText(nationality);
-    }
-
-    private void setTravellerTitle(String title) {
-        scrollAndClick(travellerTitle);
-        selectTitle(title);
-    }
-
-    private void setTravellerFirstName(String tFirstName) {
-        setText(travellerFirstName, tFirstName);
-    }
-
-    private void setTravellerLastName(String tLastName) {
-        setText(travellerLastName, tLastName);
-    }
-
-    private void setTraveller2Title(String title) {
-        scrollAndClick(traveller2Title);
-        selectTitle(title);
-    }
-
-    private void setTraveller2FirstName(String tFirstName) {
-        setText(traveller2FirstName, tFirstName);
-    }
-
-    private void setTraveller2LastName(String tLastName) {
-        setText(traveller2LastName, tLastName);
     }
 
     private void selectTitle(String title) {
@@ -112,29 +86,30 @@ public class BookingPage extends HomePage {
         }
     }
 
-    public void fillCustomerDetails(
-            String firstName, String lastName,
-            String email, String phone, String addrs,
-            String country, String nationality) {
+    public void setCustomerDetails(String firstName, String lastName,
+                                   String email, String phone, String addrs,
+                                   String country, String nationality) {
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
-        setPhoneNumber(phone);
+        setPhone(phone);
         setAddress(addrs);
-        setCountryName(country);
-        setNationalityName(nationality);
+        setCountry(country);
+        setNationality(nationality);
     }
 
-    public void fillTraveller1(String title, String fName, String lName) {
-        setTravellerTitle(title);
-        setTravellerFirstName(fName);
-        setTravellerLastName(lName);
+    public void fillTraveller_1(String title, String fName, String lName) {
+        scrollAndClick(traveller1_title);
+        selectTitle(title);
+        setText(traveller1_fName, fName);
+        setText(traveller1_lName, lName);
     }
 
-    public void fillTraveller2(String title, String fName, String lName) {
-        setTraveller2Title(title);
-        setTraveller2FirstName(fName);
-        setTraveller2LastName(lName);
+    public void fillTraveller_2(String title, String fName, String lName) {
+        scrollAndClick(traveller2_title);
+        selectTitle(title);
+        setText(traveller2_fName, fName);
+        setText(traveller2_lName, lName);
     }
 
     public void selectPayment() {

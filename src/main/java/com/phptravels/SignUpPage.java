@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SignUpPage extends HomePage {
     @FindBy(name = "email")
-    private WebElement email;
+    private WebElement emailField;
     @FindBy(name = "password")
     private WebElement password;
     @FindBy(name = "first_name")
@@ -43,11 +43,11 @@ public class SignUpPage extends HomePage {
     private void selectAccountType(String type) {
         waitForListToLoad(typeOption);
         scrollAndClick(typeOption.get(5));
-        clickSearchResults(type);
+        clickSearchResults();
     }
 
-    void setEmail(String email_addrs) {
-        setText(email, email_addrs);
+    void setEmail(String email) {
+        setText(emailField, email);
     }
 
     void setPassword(String pass) {
@@ -59,7 +59,7 @@ public class SignUpPage extends HomePage {
         setPassword(pass);
     }
 
-    public void fillCustomerInfo(
+    public void setCustomerDetails(
             String firstName, String lastName,
             String phone, String email,
             String pass, String accType) {

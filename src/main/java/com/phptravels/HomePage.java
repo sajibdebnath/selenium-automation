@@ -31,18 +31,18 @@ public class HomePage extends BasePage {
     private WebElement searchByCity;
     @FindBy(xpath = "//input[@class='select2-search__field' and @type='search']")
     private WebElement searchField;
-    @FindBy(id = "date")
-    private WebElement date;
+    @FindBy(id = "selectDate")
+    private WebElement selectDate;
     @FindBy(partialLinkText = "Travellers")
     private WebElement travellerOption;
     @FindBy(id = "tours_adults")
-    private WebElement adultsNumber;
+    private WebElement adults;
     @FindBy(id = "submit")
     private List<WebElement> searchBtns;
     @FindBy(partialLinkText = "Details")
     private List<WebElement> detailsLink;
     @FindBy(css = "img[src*='tour_loading.gif']")
-    private WebElement tourLoadingImg;
+    private WebElement loadingImg;
     @FindBy(className = "sec__title_list")
     private WebElement searchTitle;
     @FindBy(css = "ul>li[data-b='']")
@@ -67,31 +67,31 @@ public class HomePage extends BasePage {
         tourTab.click();
     }
 
-    private void searchCity(String city) {
+    public void setSearchText(String city) {
         waitAndClick(searchByCity);
         searchByText(city);
     }
 
-    private void setDate(String tourDate) {
-        waitAndClick(date);
+    public void setTourDate(String date) {
+        waitAndClick(selectDate);
         selectTourDate(days);
-
-//        date.sendKeys(tourDate);      //  sendKeys() method not working because it's readonly.
-//        for (WebElement day : getElements(driver, days)) {
-//            if (day.getText().equals(tourDate.split("-")[0])) {
-//                day.click();
-//                break;
-//            }
-//        }
     }
 
-    private void setAdultsNumber(int number) {
+    public void setAdults(int value) {
         waitAndClick(travellerOption);
-        waitForVisibility(adultsNumber);
-        setValue(adultsNumber, number);
+        setValue(adults, value);
     }
 
-    private void clickSearchBtn() {
+    public void searchTourCity(String city, String date, int value) {
+        setSearchText(city);
+        setTourDate(date);
+        setAdults(value);
+        waitForInvisibility(loadingImg, 30);
+        clickSearchTour();
+    }
+
+
+    public void clickSearchTour() {
         for (WebElement element : searchBtns) {
             if (element.isDisplayed()) {
                 element.click();
@@ -100,16 +100,8 @@ public class HomePage extends BasePage {
         }
     }
 
-    public void searchTourCity(String city, String date, int adultNumber) {
-        searchCity(city);
-        setDate(date);
-        setAdultsNumber(adultNumber);
-        clickSearchBtn();
-    }
-
     public void selectTour(String name) {
-        waitForInvisibility(tourLoadingImg, 30);
-        waitForVisibility(searchTitle);
+        waitForListToLoad(tourLists);
         for (int i = 0; i < tourLists.size(); i++) {
             if (tourLists.get(i).getText().contains(name)) {
                 scrollAndClick(detailsLink.get(i));
@@ -139,25 +131,20 @@ public class HomePage extends BasePage {
     void searchByText(String text) {
         searchField.sendKeys(text);
         waitForInvisibility(searching);
-        sleep(2);
-        clickSearchResults(text);
+        clickSearchResults();
     }
 
-    void clickSearchResults(String text) {
-        for (WebElement option : searchResults) {
-            if (option.getText().contains(text)) {
-                option.click();
-                break;
-            }
-        }
+    void clickSearchResults() {
+        waitForListToLoad(searchResults);
+        searchResults.get(0).click();
     }
 
-    public boolean linkDisplayed() {
+    public boolean SingUplinkPresent() {
         return signUpLink.isDisplayed();
     }
 
     /**
-     * dynamically select available tour date
+     * dynamically select available tour selectDate
      *
      * @param element
      */
@@ -170,7 +157,7 @@ public class HomePage extends BasePage {
                 days.add(webElement);
         }
 
-        if (days.size() - 2 <= 0) {       // If current date is the last day of month then move to next month
+        if (days.size() - 2 <= 0) {       // If current selectDate is the last day of month then move to next month
             days.clear();
             List<WebElement> nextBtns = getElements(driver, nextBtn);
             for (WebElement next : nextBtns) {
