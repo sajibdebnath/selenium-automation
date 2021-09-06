@@ -136,7 +136,8 @@ public class HomePage extends BasePage {
     }
 
     void clickSearchResults() {
-        waitForListToLoad(searchResults);
+//        waitForListToLoad(searchResults);
+        sleep(2);
         searchResults.get(0).click();
     }
 
