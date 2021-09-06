@@ -13,7 +13,7 @@ import java.util.List;
 import static utils.LocatorUtils.getElements;
 
 public class HomePage extends BasePage {
-    @FindBy(xpath = "//li[@role='option' and text()='Searching…']")
+    @FindBy(css = "li[class*='loading-results']")
     WebElement searching;
     @FindBy(xpath = "//td[@class='day ']")
     WebElement days;
