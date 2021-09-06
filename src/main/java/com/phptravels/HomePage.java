@@ -140,6 +140,7 @@ public class HomePage extends BasePage {
         waitForListToLoad(searchResults);
         System.out.println(searchResults.size() + "============>");
         searchResults.get(0).click();
+        sleep(5);
     }
 
     public boolean SingUplinkPresent() {
