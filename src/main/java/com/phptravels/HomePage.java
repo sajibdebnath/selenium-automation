@@ -49,7 +49,7 @@ public class HomePage extends BasePage {
     private List<WebElement> tourLists;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
     private WebElement bookNowBtn;
-    @FindBy(xpath = "//lie[@role='option' or contains(@class,'select2-results__option')]")
+    @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
     private List<WebElement> searchResults;
 
     public HomePage(WebDriver driver) {
@@ -132,7 +132,7 @@ public class HomePage extends BasePage {
     void searchByText(String text) {
         searchField.sendKeys(text);
         waitForInvisibility(searching);
-//        click1stItemFromResults();
+        click1stItemFromResults();
     }
 
     void click1stItemFromResults() {

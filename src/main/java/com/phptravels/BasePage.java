@@ -68,7 +68,7 @@ public class BasePage implements Page {
                 .withMessage("List items did not load: " + list)
                 .withTimeout(Duration.ofSeconds(seconds))
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
-                .until(a -> list.size() > 0);
+                .until(a -> list.size() > 0 && list.get(0).isDisplayed());
     }
 
     protected boolean isPresent(WebElement element) {
