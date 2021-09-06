@@ -136,7 +136,9 @@ public class HomePage extends BasePage {
     }
 
     void click1stItemFromResults() {
+        System.out.println(searchResults.size()+"============>");
         waitForListToLoad(searchResults);
+        System.out.println(searchResults.size()+"============>");
         searchResults.get(0).click();
     }
 
