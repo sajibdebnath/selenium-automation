@@ -5,6 +5,5 @@ MAINTAINER Faizul Islam (faizulcse@gmail.com)
 USER root
 WORKDIR /app
 COPY src /app/src
-COPY pom.xml /app
-COPY testng.xml /app
+COPY *.xml /app
 COPY screenshots /app/screenshots
