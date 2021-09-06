@@ -85,10 +85,10 @@ public class HomePage extends BasePage {
 
     public void searchTourCity(String city, String date, int value) {
         setSearchText(city);
-//        setTourDate(date);
-//        setAdults(value);
-//        waitForInvisibility(loadingImg, 30);
-//        clickSearchButton();
+        setTourDate(date);
+        setAdults(value);
+        waitForInvisibility(loadingImg, 30);
+        clickSearchButton();
     }
 
 
@@ -136,7 +136,9 @@ public class HomePage extends BasePage {
     }
 
     void click1stItemFromResults() {
+        System.out.println(searchResults.size() + "============>");
         waitForListToLoad(searchResults);
+        System.out.println(searchResults.size() + "============>");
         searchResults.get(0).click();
         sleep(5);
     }
