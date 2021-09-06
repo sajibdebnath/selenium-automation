@@ -43,7 +43,7 @@ public class SignUpPage extends HomePage {
     private void selectAccountType(String type) {
         waitForListToLoad(typeOption);
         scrollAndClick(typeOption.get(5));
-        clickSearchResults();
+        click1stItemFromResults();
     }
 
     void setEmail(String email) {

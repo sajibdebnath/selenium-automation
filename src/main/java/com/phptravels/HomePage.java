@@ -88,11 +88,11 @@ public class HomePage extends BasePage {
         setTourDate(date);
         setAdults(value);
         waitForInvisibility(loadingImg, 30);
-        clickSearchTour();
+        clickSearchButton();
     }
 
 
-    public void clickSearchTour() {
+    public void clickSearchButton() {
         for (WebElement element : searchBtns) {
             if (element.isDisplayed()) {
                 element.click();
@@ -132,12 +132,11 @@ public class HomePage extends BasePage {
     void searchByText(String text) {
         searchField.sendKeys(text);
         waitForInvisibility(searching);
-        clickSearchResults();
+        click1stItemFromResults();
     }
 
-    void clickSearchResults() {
-//        waitForListToLoad(searchResults);
-        sleep(2);
+    void click1stItemFromResults() {
+        waitForListToLoad(searchResults);
         searchResults.get(0).click();
     }
 

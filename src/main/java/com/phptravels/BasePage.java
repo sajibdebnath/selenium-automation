@@ -4,8 +4,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-import utils.LocatorUtils;
 import utils.BundleUtils;
+import utils.LocatorUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -65,7 +65,7 @@ public class BasePage implements Page {
 
     protected void waitForListToLoad(List<WebElement> list, int seconds) {
         getFluentWait()
-                .withMessage("List items did not load")
+                .withMessage("List items did not load: " + list)
                 .withTimeout(Duration.ofSeconds(seconds))
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
                 .until(a -> list.size() > 0);
