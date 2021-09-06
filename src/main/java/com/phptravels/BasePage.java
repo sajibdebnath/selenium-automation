@@ -47,12 +47,15 @@ public class BasePage implements Page {
     }
 
     protected void waitForInvisibility(WebElement element, int seconds) {
+        By by = LocatorUtils.getByLocator(element);
+        System.out.println("waitForInvisibility");
         getFluentWait()
-                .withMessage("Element still visible: " + LocatorUtils.getByLocator(element))
+                .withMessage("Element is still visible: " + by)
                 .withTimeout(Duration.ofSeconds(seconds))
                 .until(a -> {
                     try {
-                        return !element.isDisplayed();
+                        System.out.println(element.isDisplayed() + "<>" + element.isDisplayed() + "<>" + driver.findElements(by).size());
+                        return !(element.isDisplayed() && element.isDisplayed());
                     } catch (org.openqa.selenium.NoSuchElementException e) {
                         return true;
                     }
@@ -163,6 +166,7 @@ public class BasePage implements Page {
     private FluentWait<String> getFluentWait() {
         return new FluentWait<>("")
                 .withTimeout(Duration.ofSeconds(BundleUtils.getInteger("FLUENT_WAIT")))
-                .pollingEvery(Duration.ofMillis(BundleUtils.getInteger("POLLING_DELAY")));
+                .pollingEvery(Duration.ofMillis(BundleUtils.getInteger("POLLING_DELAY")))
+                .ignoring(StaleElementReferenceException.class);
     }
 }

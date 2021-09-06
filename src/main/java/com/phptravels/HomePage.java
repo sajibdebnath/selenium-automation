@@ -87,8 +87,8 @@ public class HomePage extends BasePage {
         setSearchText(city);
         setTourDate(date);
         setAdults(value);
-        waitForInvisibility(loadingImg, 30);
         clickSearchButton();
+        waitForInvisibility(loadingImg, 30);
     }
 
 
@@ -136,6 +136,7 @@ public class HomePage extends BasePage {
     }
 
     void click1stItemFromResults() {
+        System.out.println(searchResults.get(0).getText() + "<>" + searchResults.get(0).isDisplayed() + "<>" + searchResults.get(0).isEnabled());
         waitForListToLoad(searchResults);
         System.out.println(searchResults.size() + "============>");
         for (WebElement tour : searchResults) {
