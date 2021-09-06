@@ -49,7 +49,7 @@ public class HomePage extends BasePage {
     private List<WebElement> tourLists;
     @FindBy(xpath = "//*[contains(text(),'Book Now')]")
     private WebElement bookNowBtn;
-    @FindBy(xpath = "//li[@role='option' or contains(@class,'select2-results__option')]")
+    @FindBy(xpath = "//lie[@role='option' or contains(@class,'select2-results__option')]")
     private List<WebElement> searchResults;
 
     public HomePage(WebDriver driver) {
@@ -85,10 +85,10 @@ public class HomePage extends BasePage {
 
     public void searchTourCity(String city, String date, int value) {
         setSearchText(city);
-        setTourDate(date);
-        setAdults(value);
-        waitForInvisibility(loadingImg, 30);
-        clickSearchButton();
+//        setTourDate(date);
+//        setAdults(value);
+//        waitForInvisibility(loadingImg, 30);
+//        clickSearchButton();
     }
 
 
@@ -132,13 +132,13 @@ public class HomePage extends BasePage {
     void searchByText(String text) {
         searchField.sendKeys(text);
         waitForInvisibility(searching);
-        click1stItemFromResults();
+//        click1stItemFromResults();
     }
 
     void click1stItemFromResults() {
-        System.out.println(searchResults.size()+"============>");
+        System.out.println(searchResults.size() + "============>");
         waitForListToLoad(searchResults);
-        System.out.println(searchResults.size()+"============>");
+        System.out.println(searchResults.size() + "============>");
         searchResults.get(0).click();
     }
 
