@@ -48,15 +48,14 @@ public class BasePage implements Page {
 
     protected void waitForInvisibility(WebElement element, int seconds) {
         By by = LocatorUtils.getByLocator(element);
-        System.out.println("waitForInvisibility");
         getFluentWait()
                 .withMessage("Element is still visible: " + by)
                 .withTimeout(Duration.ofSeconds(seconds))
                 .until(a -> {
                     try {
-                        System.out.println(element.isDisplayed() + "<>" + element.isDisplayed() + "<>" + driver.findElements(by).size());
-                        return !(element.isDisplayed() && element.isDisplayed());
+                        return !(element.isDisplayed() && element.isEnabled());
                     } catch (org.openqa.selenium.NoSuchElementException e) {
+                        System.out.println("==========>"+element.toString());
                         return true;
                     }
                 });

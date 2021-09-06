@@ -136,14 +136,8 @@ public class HomePage extends BasePage {
     }
 
     void click1stItemFromResults() {
-        System.out.println(searchResults.get(0).getText() + "<>" + searchResults.get(0).isDisplayed() + "<>" + searchResults.get(0).isEnabled());
         waitForListToLoad(searchResults);
-        System.out.println(searchResults.size() + "============>");
-        for (WebElement tour : searchResults) {
-            System.out.println(tour.getText() + "<>" + tour.isDisplayed() + "<>" + tour.isEnabled());
-        }
         searchResults.get(0).click();
-        sleep(5);
     }
 
     public boolean SingUplinkPresent() {
