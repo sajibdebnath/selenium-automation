@@ -26,14 +26,14 @@
 ##### Example
 - Run all tests of a class `mvn clean test -Dremote=true -Dtest='LoginTest'`
 - Run test method of a class `mvn clean test -Dremote=true -Dtest='LoginTest#loginAndLogoutTest'`
-- To hide the console warning add `-q` flag `mvn clean test -q`
+- To hide the console warning add `-q` flag like `mvn clean test -q`
 
 ### Running Tests in Docker Container
 - Open docker app
 - Open terminal or cmd
 - Go to project root directory `cd ~/selenium-automation`
 - On config file`/src/main/resources/config.properties` set `HUB_ADDRESS=hub:4444`
-- Set `TagName = "phptravels"`
+- Set `${TagName} = "phptravels"`
 - Docker up `docker-compose -p ${TagName} up --remove-orphans -d`
 - Docker scale `docker-compose -p ${TagName} scale firefox=5 chrome=5`
 - Docker build image `docker build --tag ${TagName}_image .`
@@ -48,7 +48,7 @@
 - Docker image remove `docker rmi ${TagName}_image -f`
 
 ### Project directory structure
-```cmd
+```commandline
 .
 ├── driver
 │   ├── chromedriver
@@ -56,25 +56,23 @@
 │   ├── geckodriver
 │   └── geckodriver.exe
 ├── screenshots
-│   └── bookingTicketAsGuestUserTest.png
 ├── src
 │   ├── main
 │   │   ├── java
 │   │   │   ├── com
 │   │   │   │   └── phptravels
 │   │   │   │       ├── BasePage.java
-│   │   │   │       ├── BookingDetailsPage.java
+│   │   │   │       ├── BookingPage.java
 │   │   │   │       ├── DashboardPage.java
 │   │   │   │       ├── HomePage.java
 │   │   │   │       ├── LoginPage.java
 │   │   │   │       ├── Page.java
 │   │   │   │       └── SignUpPage.java
 │   │   │   └── utils
-│   │   │       ├── BrowserUtils.java
+│   │   │       ├── BundleUtils.java
+│   │   │       ├── DriverUtils.java
 │   │   │       ├── EventListener.java
 │   │   │       ├── LocatorUtils.java
-│   │   │       ├── PathUtils.java
-│   │   │       ├── Utils.java
 │   │   │       └── WindowHandler.java
 │   │   └── resources
 │   │       └── config.properties
@@ -87,10 +85,10 @@
 │           │   ├── SignUpTest.java
 │           │   └── Test.java
 │           └── testdata
-│               ├── SignupData.java
-│               ├── SiteData.java
-│               ├── TourData.java
-│               └── UserData.java
+│               ├── Customer.java
+│               ├── Site.java
+│               ├── Tour.java
+│               └── User.java
 ├── Dockerfile
 ├── Jenkinsfile
 ├── README.md
@@ -98,5 +96,6 @@
 ├── pom.xml
 ├── selenium-automation.iml
 ├── selenium-server-standalone-3.141.59.jar
-└── testng.xml
+├── testng.xml
+└── wip.xml
 ```
