@@ -3,7 +3,7 @@ node('master') {
     def BUILD = env.BUILD_NUMBER
     def BROWSER = env.BROWSER
     def TEST_SUITE = env.TEST_SUITE
-    def JOB_NAME = "${env.JOB_NAME.replaceAll(/_|-|\\s|/, '').toLowerCase()}${BUILD}"
+    def JOB_NAME = "${env.JOB_NAME.replaceAll(/_|-| |/, '').toLowerCase()}${BUILD}"
 
     def IMAGE = "${JOB_NAME}_image"
     def CONTAINER = "${JOB_NAME}_container"
