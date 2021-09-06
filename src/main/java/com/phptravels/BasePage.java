@@ -53,7 +53,7 @@ public class BasePage implements Page {
                 .until(a -> {
                     try {
                         return !element.isDisplayed();
-                    } catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.StaleElementReferenceException e) {
+                    } catch (org.openqa.selenium.NoSuchElementException e) {
                         return true;
                     }
                 });
