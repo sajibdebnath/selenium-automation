@@ -16,7 +16,7 @@ public class LocatorUtils {
      */
     public static By getByLocator(WebElement webElement) {
         String element = webElement.toString().split(
-                "(?=\\sid:\\s|\\sname:\\s|\\sselector:\\s|\\slink text:|\\spartial link text:\\s|\\sxpath:\\s|" +
+                "(?=\\sid:\\s|\\sname:\\s|\\sselector:\\s|\\slink text:|\\sxpath:\\s|" +
                         "By.id:\\s|By.name:\\s|By.tagName:\\s|By.className:\\s|By.cssSelector:\\s|" +
                         "By.linkText:\\s|By.partialLinkText:\\s|By.xpath:\\s)")[1];
 
@@ -40,10 +40,9 @@ public class LocatorUtils {
             case "selector":
             case "By.cssSelector":
                 return By.cssSelector(selector);
-            case "link text":
             case "By.linkText":
                 return By.linkText(selector);
-            case "partial link text":
+            case "link text":
             case "By.partialLinkText":
                 return By.partialLinkText(selector);
             case "By.xpath":

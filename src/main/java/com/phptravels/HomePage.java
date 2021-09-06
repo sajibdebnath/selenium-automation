@@ -31,7 +31,7 @@ public class HomePage extends BasePage {
     private WebElement searchByCity;
     @FindBy(xpath = "//input[@class='select2-search__field' and @type='search']")
     private WebElement searchField;
-    @FindBy(id = "selectDate")
+    @FindBy(id = "date")
     private WebElement selectDate;
     @FindBy(partialLinkText = "Travellers")
     private WebElement travellerOption;
@@ -79,6 +79,7 @@ public class HomePage extends BasePage {
 
     public void setAdults(int value) {
         waitAndClick(travellerOption);
+        waitForVisibility(adults);
         setValue(adults, value);
     }
 
