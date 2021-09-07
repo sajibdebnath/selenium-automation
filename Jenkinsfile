@@ -2,8 +2,9 @@ node('master') {
     def WORKSPACE = env.WORKSPACE
     def BUILD = env.BUILD_NUMBER
     def BROWSER = env.BROWSER
+    def NODE_COUNT = env.NODE_COUNT
     def TEST_SUITE = env.TEST_SUITE
-    def JOB_NAME = "seleniumautomation${BUILD}"
+    def JOB_NAME = "${env.JOB_NAME.replaceAll(/_|-| |/, '').toLowerCase()}${BUILD}"
 
     def IMAGE = "${JOB_NAME}_image"
     def CONTAINER = "${JOB_NAME}_container"
@@ -16,8 +17,8 @@ node('master') {
         sh "docker build --tag ${IMAGE} --file '${WORKSPACE}/Dockerfile' '${WORKSPACE}' "
     }
 
-    stage("Run Selenium Grid Hub") {
-        sh "docker-compose -p ${JOB_NAME} up --remove-orphans -d"
+    stage("Run Selenium Grid Hub and Scaling Node") {
+        sh "docker-compose -p ${JOB_NAME} up --scale ${BROWSER}=${NODE_COUNT} --remove-orphans -d"
     }
 
     stage("Run Tests") {
